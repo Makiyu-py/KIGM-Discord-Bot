@@ -239,6 +239,10 @@ class FunCommands(commands.Cog, name=':smile: Fun Commands'):
   async def britishaccent(self, ctx, *, sentence):
     await ctx.send(the_universe.british_accent(sentence))
 
+  @commands.command(description='Converts your text to OwO ^-^',aliases=['texttoemoji', 'tte'])
+  async def text_to_emoji(self, ctx, *, sentence):
+    await ctx.send(the_universe.ttoemoji(sentence))
+
   @commands.command(description='V i r t u a l  s l a p p',aliases=['slapp'])
   async def slap(self, ctx, *, User : discord.Member):
     slap_gif = ['https://tenor.com/view/bobs-burgers-louise-louise-slaps-slap-gif-12656044',
