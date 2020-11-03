@@ -88,9 +88,11 @@ Shows you... the commands?
 
 ### `suggest`
 
-Suggest something to the devs! (the suggestion will go to the [support server](https://discord.gg/jz4WxkB) in the text channel, #suggestions-area)
+Suggest something to the devs!
 
 ![](https://cdn.discordapp.com/attachments/770560162812657715/772977501542416404/Screen_Shot_2020-11-03_at_8.14.39_AM.png)
+
+(the suggestion will go to the [support server](https://discord.gg/jz4WxkB) in the text channel, #suggestions-area)
 
 ![](https://cdn.discordapp.com/attachments/770560162812657715/772977505111375882/Screen_Shot_2020-11-03_at_8.14.53_AM.png)
 
