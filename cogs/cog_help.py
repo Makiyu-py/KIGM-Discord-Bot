@@ -76,7 +76,7 @@ class HelpCommands(commands.Cog, name=':bookmark_tabs: Help'):
 
   @commands.command(description = "Invite this bot to your server!",aliases=['inv'])
   async def invite(self, ctx):
-    await ctx.channel.send("<a:weeeee:771309755427061770>**Invite Me**<a:weeeee:771309755427061770>\nhttps://discord.com/oauth2/authorize?client_id=763626077292724264&permissions=0&scope=bot")
+    await ctx.channel.send("<a:weeeee:771309755427061770>**Invite Me**<a:weeeee:771309755427061770>\nhttps://discord.com/oauth2/authorize?client_id=763626077292724264&permissions=268790854&scope=bot")
 
     
 def setup(bot):
