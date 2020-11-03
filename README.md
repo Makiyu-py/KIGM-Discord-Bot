@@ -86,7 +86,7 @@ Shows you... the commands?
 
 ![](https://cdn.discordapp.com/attachments/770560162812657715/772976537066143774/unknown.png)
 
-### `suggest`
+### `&suggest`
 
 Suggest something to the devs!
 
@@ -117,3 +117,7 @@ So I started this project!
 Thanks for helping/reading! :)
 
 ~ Makiyu-py
+
+# Developer
+
+__Makiyu`#4707`__|`526616688091987968`| [GitHub](https://github.com/Makiyu-py)
