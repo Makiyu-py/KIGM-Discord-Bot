@@ -129,5 +129,6 @@ dmypy.json
 .pyre/
 
 # Custom
-
 __pycache__/
+.poetry.lock
+.pyproject.toml
