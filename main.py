@@ -12,7 +12,7 @@ import os
 # 3rd Party Libraries Used
 from termcolor import colored
 import motor.motor_asyncio  # idk what dis is but it's used on a MenuDocs vid so ¯\_(ツ)_/¯
-import asyncio  # Ironic how I never used this in this file but this is my most used in all other files lol
+import asyncio
 
 # Local Packages
 from keep_alive import keep_alive # Reason why bot is 24/7
