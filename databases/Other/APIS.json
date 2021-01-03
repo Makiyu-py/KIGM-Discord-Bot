@@ -1,0 +1,9 @@
+{
+  "KanyeQuote" : "https://api.kanye.rest/",
+  "Useless Fact" : "https://uselessfacts.jsph.pl/random.json?language=en",
+  "Random Opinion" : "https://opinionated-quotes-api.gigalixirapp.com/v1/quotes",
+  "Wasted" : "https://some-random-api.ml/canvas/wasted/?avatar=",
+  "YTComment" : "https://some-random-api.ml/canvas/youtube-comment/?avatar={0}&comment={1}&username={2}",
+  "RainbowPFP" : "https://some-random-api.ml/canvas/gay/?avatar=",
+  "JailPFP" : "https://some-random-api.ml/canvas/jail?avatar="
+}

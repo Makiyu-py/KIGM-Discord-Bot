@@ -6,7 +6,7 @@ def get_prefix(client, message):
   if not message.guild:
     return commands.when_mentioned_or("&")(client, message)
 
-  with open("prefixes.json", "r") as f:
+  with open("databases/Settings/prefixes.json", "r") as f:
     prefixes = json.load(f)
 
   if str(message.guild.id) not in prefixes:
@@ -116,3 +116,97 @@ def convert_list_to_string(org_list, seperator=' '):
     """ Convert list to string, by joining all item in list with given separator.
         Returns the concatenated string """
     return seperator.join(org_list)
+
+def convert(time):
+    pos = ["s","m","h","d","w"]
+
+    time_dict = {"s" : 1, "m" : 60, "h" : 3600 , "d" : 3600*24, "w" : 3600*24*7}
+
+    unit = time[-1]
+
+    if unit not in pos:
+        return -1
+    try:
+        val = int(time[:-1])
+    except:
+        return -2
+
+
+    return val * time_dict[unit]
+
+def syntax(command):
+  cmd_and_aliases = "|".join([str(command), *command.aliases])
+  params = []
+
+  for key, value in command.params.items():
+    if key not in ("self", "ctx"):
+      params.append(f"[{key}]" if "NoneType" in str(value) else f"<{key}>")
+
+  params = " ".join(params)
+
+  return f'`{cmd_and_aliases} {params}`'
+
+def server_prefix(guild_id):
+  with open("databases/Settings/prefixes.json", 'r') as f:
+    datap = json.load(f)
+
+    try:
+      serverpre = datap[str(guild_id)]
+
+    except KeyError or AttributeError:
+      return "&"
+      
+    else:
+      return serverpre
+
+def clapdacheeks(msg):
+  checkmode = msg.split(",")
+  if checkmode[0].lower() in ['word', "words", 'per word', 'w']:
+    if len(checkmode[1]) > 1500:
+      return "**ERROR!**\nThis is message **cannot be clapped** 😱 since it is __too long!__"
+
+    else:
+      clapthis = checkmode[1].split(" ")
+
+      if len(clapthis) < 2:
+        return "**ERROR!**\nThis is message **cannot be clapped** 😱 since it is __too short!__\n(minimum words to be clapped is 2 words btw)"
+
+      finalProduct = ""
+      wordcount = 0
+      for word in clapthis:
+        wordcount += 1
+        if word == " ":
+          continue
+
+        if wordcount == len(clapthis):
+          finalProduct += word
+        else:
+          finalProduct += f"{word} :clap: "
+
+
+      return finalProduct
+
+  elif checkmode[0].lower() in ['letter', "letters", 'per letter', 'l']:
+    if len(checkmode[1]) > len("PneumonoultramicroscopicsilicovolcanoconiosissupercalifragilisticexpialidociousPseudopseudohypoparathyroidism"):
+      return "**ERROR!**\nThis is message **cannot be clapped** 😱 since it is __too long!__\n(Longer than the three of the longest words in English Dictionaries combined xD)"
+
+    if len(checkmode[1]) <= 2:
+      return "**ERROR!**\nThis is message **cannot be clapped** 😱 since it is __too short!__\n(minimum letters to be clapped is 3 letters btw)"
+
+    finalLetterClapped = ""
+    lettercount = 0
+    for letter in checkmode[1]:
+      lettercount += 1
+      if letter == " ":
+        continue
+
+      if lettercount == len(checkmode[1]):
+        finalLetterClapped += letter
+      else:
+        finalLetterClapped += f"{letter} :clap: "
+
+    return finalLetterClapped
+
+
+  else:
+    return "**ERROR!**\nInvalid Clap Mode."
