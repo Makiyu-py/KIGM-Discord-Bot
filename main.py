@@ -31,7 +31,7 @@ import motor.motor_asyncio  # idk what dis is but it's used on a MenuDocs vid so
 import asyncio
 
 # Local Packages
-from keep_alive import keep_alive # Reason why bot is 24/7
+from keep_alive import keep_alive # Reason why bot is 24/7 bc of replit *(remove this if u forked this repo)*
 from the_universe import get_prefix
 from utils.mongo import DBShortCuts  # Shortcuts for mongodb stuff (tnx MenuDocs)
 

@@ -131,7 +131,6 @@ dmypy.json
 .pyre/
 
 # Custom
-__pycache__/
 cogs/comms/cog_sm.py
 cogs/other/topgg.py
 cogs/other/cog_tests.py
