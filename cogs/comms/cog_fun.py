@@ -31,6 +31,7 @@ class FunCommands(commands.Cog, name='😄 Fun Commands'):
   @commands.guild_only()
   @cooldown(1, 2, BucketType.user)
   async def meme(self, ctx, subreddit : Optional[str]=""):
+    '''
     async with ctx.channel.typing():
       find_app_sub = True
       all_subreddits = ['memes', 'meme', 'dankmemes', 'Memes_Of_The_Dank', 'PrequelMemes', 'MemeEconomy', 'wholesomememes', 'absolutelynotme_irl', 'me_irl', 'funny', 'aww', 'insanepeoplefacebook', 'WatchPeopleDieInside', 'starterpacks', 'WhitePeopleTwitter', 'ScottishPeopleTwitter', 'animemes']
@@ -53,14 +54,13 @@ class FunCommands(commands.Cog, name='😄 Fun Commands'):
           if len(all_submissions) >= 35:
             break
 
-          while find_app_sub is True:
-            output_submission = random.choice(all_submissions)
-            
-            ends = ['jpg', 'jpeg', 'gif', 'mp4', 'png']
+          ends = ['jpg', 'jpeg', 'gif', 'mp4', 'png']
+          output_submission = random.choice(all_submissions)
 
-            for endsub in ends:
-              if output_submission.url.endswith(f'.{endsub}') or output_submission.url.startswith("https://giphy.com/") or output_submission.url.startswith("https://imgur.com/"):
-                find_app_sub = False
+          for endsub in ends:
+            while not output_submission.url.endswith(f'.{endsub}') or not output_submission.url.startswith("https://giphy.com/") or not output_submission.url.startswith("https://imgur.com/"):
+              output_submission = random.choice(all_submissions)
+            
 
         embed = discord.Embed(title=output_submission.title, colour=self.bot.main_color, url=output_submission.url)
 
@@ -73,7 +73,10 @@ class FunCommands(commands.Cog, name='😄 Fun Commands'):
           
       else:
         await ctx.send("**ERROR!**\nReddit Not Working wooo *. . .*")
-    
+
+    '''
+    await ctx.send("*sigh*, still not working.")
+
 
   @commands.command(description='Convert text to binary00101001')
   @commands.guild_only()

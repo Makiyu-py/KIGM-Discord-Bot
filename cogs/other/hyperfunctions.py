@@ -16,7 +16,7 @@ class Asyncfuncs(commands.Cog):
   async def open_account(self, user):
 
 
-    # if await self.get_user_data():
+    # if await self.get_user_data(user):
     #   return False
     
     # else:
@@ -31,13 +31,13 @@ class Asyncfuncs(commands.Cog):
 
 
     mode = [mode]
-    mode += 'Net Worth'
+    mode.append('Net Worth')
 
     for item in mode:
       await self.bot.ecod.increment("BANK ID - " + user.id, change, item)
 
-    # bal = None
-    # return True
+    
+    return await self.get_user_data(user)
 
 
 def setup(bot):

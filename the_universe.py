@@ -56,6 +56,8 @@ def british_accent(brsentence):
 
 def ttoemoji(sentence):
 
+  # Don't ask why it's hard-coded ...
+
   beei = [' 🇧',' 🅱️']
   ow = [' 🇴',' ⭕',' 🅾️']
   ehks = [' ❌', ' ✖️', ' 🇽']

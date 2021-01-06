@@ -17,7 +17,7 @@ import asyncio
 # Local Packages
 from keep_alive import keep_alive # Reason why bot is 24/7
 from the_universe import get_prefix
-from utils.mongo import DBShortCuts  # Shortcuts for mongodb stuff
+from utils.mongo import DBShortCuts  # Shortcuts for mongodb stuff (tnx MenuDocs)
 
 
 client = commands.Bot(command_prefix=get_prefix, help_command=None,case_insensitive=True, intents=discord.Intents.all(), owner_id=526616688091987968)

@@ -1,7 +1,6 @@
 from typing import Optional
 import discord
 import platform
-from discord import Profile
 from utils.paginate import dpyPaginate
 from discord.ext import commands
 

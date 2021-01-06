@@ -43,6 +43,8 @@ class Settings(commands.Cog, name=':gear: Settings'):
       ctx.command.reset_cooldown(ctx)
       return
       
+    
+    # Changing this to MongoDB soon
     with open("databases/Settings/prefixes.json", "r") as f:
       prefixes= json.load(f)
 
