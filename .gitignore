@@ -25,6 +25,8 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+poetry.lock
+pyproject.toml
 MANIFEST
 
 # PyInstaller
@@ -130,5 +132,7 @@ dmypy.json
 
 # Custom
 __pycache__/
-.poetry.lock
-.pyproject.toml
+cogs/comms/cog_sm.py
+cogs/other/topgg.py
+cogs/other/cog_tests.py
+keep_alive.py
