@@ -48,6 +48,7 @@ client.owner = client.get_user(client.owner_id)
 
 @client.event
 async def on_ready():
+  await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="&help / @Kid In Google Images (for more info!)"))
   print(colored("-------------------------------------", 'red'))
   for e in colored("Now Initializing Database. . .", 'grey', 'on_green'):
     sys.stdout.write(e)
@@ -114,32 +115,6 @@ async def on_guild_remove(guild):
 		prefixes = json.load(f)
 
 	prefixes.pop(str(guild.id))
-
-@tasks.loop(minutes=5)
-async def change_status():
-
-	statuses = [
-		    "with your satisfaction... | ping me if ur in help",
-		    "with you ;) | ping me if ur in help",
-		    f"with my spaghetti code made by {str(client.owner)} | ping me if ur in help",
-		    "ping me if ur in help pls i rlly need attention",
-		    f"on {str(len(client.guilds))} servers! | ping me if ur in help",
-		    "with this good life that i have! | ping me if ur in help",
-		    "with these &dadjokes you command me every damn minute | ping me if ur in help",
-		    "with the bigger bot boys, they function cool | ping me if ur in help",
-		    "jumping in the bed! | ping me if ur in help", "00111010 00101001 | ping me if ur in help",
-		    "with over 1800 lines of code! | ping me if ur in help",
-		    ".-... .... . .-.. .--. / ---... -.--.- | ping me if ur in help",
-        f"with {str(len(client.guilds))} ignorant groups of people | ping me if ur in help",
-        "\"I feel calm but energized\" | ping me if ur in help"
-		]
-	status = random.choice(statuses)
-	await client.change_presence(activity=discord.Game(status))
-
-@change_status.before_loop
-async def before_change_status():
-  await client.wait_until_ready()
-
 
 
 @client.command(hidden=True)
@@ -320,7 +295,7 @@ for filename in os.listdir('./cogs/other'):
 print(colored("------------------------------------------", 'yellow'))
 
 
-change_status.start() 
-keep_alive()
+
+keep_alive()  # again, pls remove this line if u forked this from GitHub.
 token = os.environ.get("DISCORD_BOT_SECRET")
 client.run(token)
