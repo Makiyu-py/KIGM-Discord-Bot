@@ -148,22 +148,22 @@ class FunCommands(commands.Cog, name='😄 Fun Commands'):
   @commands.command(description='Converts your text to OwO ^--^',aliases=['0w0'])
   @commands.guild_only()
   async def owo(self, ctx, *, sentence):
-    await ctx.send(the_universe.text_to_owo(sentence))
+    await ctx.message.reply(the_universe.text_to_owo(sentence), mention_author=True)
 
   @commands.command(description='Converts your text to BriIsh',aliases=['british'])
   @commands.guild_only()
   async def britishaccent(self, ctx, *, sentence):
-    await ctx.send(the_universe.british_accent(sentence))
+    await ctx.message.reply(the_universe.british_accent(sentence), mention_author=True)
 
   @commands.command(description='Converts your text to emoji! 💩',aliases=['texttoemoji', 'emojithis', 'tte'])
   @commands.guild_only()
   async def text_to_emoji(self, ctx, *, sentence):
-    await ctx.send(the_universe.ttoemoji(sentence))
+    await ctx.message.reply(the_universe.ttoemoji(sentence), mention_author=True)
 
   @commands.command(description="Clap your way with adding the clap :clap: emoji between every letter/word!", aliases=['clapify'])
   async def clap(self, ctx, mode_of_clap_either_letter_or_word, *, phrase):
     output = f"{mode_of_clap_either_letter_or_word},{phrase}"
-    await ctx.send(the_universe.clapdacheeks(output))
+    await ctx.message.reply(the_universe.clapdacheeks(output), mention_author=True)
 
   @commands.command(description='V i r t u a l  s l a p p',aliases=['slapp'])
   @commands.guild_only()
@@ -214,7 +214,7 @@ class FunCommands(commands.Cog, name='😄 Fun Commands'):
 
   @commands.command(description='will give you a random spoiler from a movie!')
   async def spoiler(self, ctx):
-    await ctx.send("https://media.discordapp.net/attachments/767572984860508160/770165174891184148/image0.gif")
+    await ctx.message.reply("https://media.discordapp.net/attachments/767572984860508160/770165174891184148/image0.gif", mention_author=True)
     
 def setup(bot):
 	bot.add_cog(FunCommands(bot))

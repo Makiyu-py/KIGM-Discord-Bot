@@ -134,4 +134,6 @@ dmypy.json
 cogs/comms/cog_sm.py
 cogs/other/topgg.py
 cogs/other/cog_tests.py
+databases/Settings/
+databases/Economy/
 keep_alive.py

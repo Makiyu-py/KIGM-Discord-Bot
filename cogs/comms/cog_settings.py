@@ -34,7 +34,7 @@ class Settings(commands.Cog, name=':gear: Settings'):
 
     await self.bot.config.upsert({"_id" : ctx.guild.id, "MuteRole" : mutedrole_id})
 
-    await ctx.send(f"Muted Role is now updated as {muted_role.mention}!")
+    await ctx.message.reply(f"Muted Role is now updated as {muted_role.mention}!")
 
   @commands.command(description='Set your Giveaway Maker role! \n(only users with manage roles have access to this command.)', aliases=['setgrrole', 'setgiveaway'])
   @commands.guild_only()
@@ -46,7 +46,7 @@ class Settings(commands.Cog, name=':gear: Settings'):
     await self.bot.config.upsert({"_id" : ctx.guild.id, "GARole" : giveaway_id})
 
 
-    await ctx.send(f"Givaway Maker Role is now updated as {giveaway_maker_role.mention}!")
+    await ctx.message.reply(f"Givaway Maker Role is now updated as {giveaway_maker_role.mention}!")
 
   @commands.command(description='Change the prefix of me! \n(only admins have access to this command.)',aliases=['change_prefix'])
   @commands.guild_only()
@@ -68,7 +68,7 @@ class Settings(commands.Cog, name=':gear: Settings'):
     with open("databases/Settings/prefixes.json", "w") as f:
       json.dump(prefixes,f)
     
-    await ctx.send(f"Prefix now updated with `{new_prefix}`!")
+    await ctx.message.reply(f"Prefix now updated with `{new_prefix}`!")
 
 def setup(bot):
   bot.add_cog(Settings(bot))

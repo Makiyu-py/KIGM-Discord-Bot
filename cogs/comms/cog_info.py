@@ -27,7 +27,7 @@ class InfoCommands(commands.Cog, name=':information_source: Informative Commands
 
   @commands.command(description='Checks the latency of the bot!')
   async def ping(self, ctx):
-    await ctx.send(f':regional_indicator_p: :regional_indicator_o: :regional_indicator_n: :regional_indicator_g: :grey_exclamation: `{round(self.bot.latency * 1000)}ms`')
+    await ctx.message.reply(f':regional_indicator_p: :regional_indicator_o: :regional_indicator_n: :regional_indicator_g: :grey_exclamation: `{round(self.bot.latency * 1000)}ms`', mention_author=True)
     
   @commands.command(aliases=['cmdstats'], description='Get info about what are the most used commands! (and least too)')
   @commands.guild_only()
