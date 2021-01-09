@@ -134,7 +134,7 @@ class HelpCommands(commands.Cog, name=':bookmark_tabs: Help'):
 
   @commands.command(description = "Invite this bot to your server!",aliases=['inv'])
   async def invite(self, ctx):
-    await ctx.channel.send("<a:weeeee:771309755427061770>**Invite Me**<a:weeeee:771309755427061770>\nhttps://discord.com/oauth2/authorize?client_id=763626077292724264&scope=bot&permissions=273115158")
+    await ctx.channel.send("<a:weeeee:771309755427061770>**Invite Me**<a:weeeee:771309755427061770>\nhttps://discord.com/api/oauth2/authorize?client_id=763626077292724264&permissions=273115158&scope=bot%20applications.commands")
 
   @commands.command(description="You have a bug to report? Use this command!", aliases=['bugreport'])
   @cooldown(2, 600, BucketType.user)

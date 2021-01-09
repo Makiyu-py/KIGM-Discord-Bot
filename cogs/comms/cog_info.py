@@ -70,7 +70,7 @@ class InfoCommands(commands.Cog, name=':information_source: Informative Commands
     embed.add_field(name="<:members:769449777472471060>Ignorant Friends",      value= memberCount)
     embed.add_field(name='<a:botdev_shine:769445361693491200>Developer', value='<@526616688091987968>')
     embed.add_field(name=':people_hugging:Support Server', value='[Plz join](https://discord.gg/jz4WxkB)')
-    embed.add_field(name="<:invite:769450163671400459>Bot Invite", value="[Invite meee](https://discord.com/oauth2/authorize?client_id=763626077292724264&scope=bot&permissions=273115158)", inline=True )
+    embed.add_field(name="<:invite:769450163671400459>Bot Invite", value="[Invite meee](https://discord.com/api/oauth2/authorize?client_id=763626077292724264&permissions=273115158&scope=bot%20applications.commands)", inline=True )
     embed.set_author(name=f"{ctx.bot.user.name} Stats", icon_url=ctx.bot.user.avatar_url)
     embed.set_footer(text=f"As of~~")
     await ctx.send(embed=embed)
