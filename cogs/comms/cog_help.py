@@ -62,7 +62,7 @@ class HelpCommands(commands.Cog, name=':bookmark_tabs: Help'):
 
     cogs=[c for c in self.bot.cogs.keys()]
 
-    SB_COGS = ['Events', 'Asyncfuncs', 'Tests', ':desktop: Server Managing', 'TopGG']
+    SB_COGS = ['Events', 'Asyncfuncs', 'Tests', ':desktop: Server Managing', 'SlashCommands', 'TopGG']
     
     for hidden_cog in SB_COGS:
       cogs.remove(hidden_cog)
