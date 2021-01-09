@@ -49,7 +49,7 @@ class RandomCommands(commands.Cog, name=':grey_question: Randomness'):
 
         embed.set_image(url=YTAPI)
 
-        await ctx.send(embed=embed)
+        await ctx.message.reply(embed=embed)
         
   '''
   @commands.command(aliases=['pfpbegay'], description='Make your avatar go 🌈 brr 🌈')
@@ -71,7 +71,7 @@ class RandomCommands(commands.Cog, name=':grey_question: Randomness'):
 
         embed.set_image(url=Rainbowpfp)
 
-        await ctx.send(embed=embed)
+        await ctx.message.reply(embed=embed)
 
   @commands.command(aliases=['jail'], description='Lock ur avatar to jail :P')
   async def jailify(self, ctx, user: Optional[discord.Member]=None):
@@ -91,7 +91,7 @@ class RandomCommands(commands.Cog, name=':grey_question: Randomness'):
 
         embed.set_image(url=Jailpfp)
 
-        await ctx.send(embed=embed)
+        await ctx.message.reply(embed=embed)
 
   @commands.command(aliases=['quotekanye'], description='Get a real (yes, real. Even I was surprised that they\'re all real lol) random quote from Kanye West himself!')
   @commands.guild_only()
@@ -123,7 +123,7 @@ class RandomCommands(commands.Cog, name=':grey_question: Randomness'):
         embed.set_footer(text=f'Requested By {ctx.author}', icon_url=ctx.author.avatar_url)
         embed.set_thumbnail(url=pick_img)
 
-        await ctx.send(embed=embed)
+        await ctx.message.reply(embed=embed)
 
       else:
         print(f"response status gave us {response.status} :(")
@@ -149,7 +149,7 @@ class RandomCommands(commands.Cog, name=':grey_question: Randomness'):
 
         embed.set_image(url=UFAPI)
 
-        await ctx.send(embed=embed)
+        await ctx.message.reply(embed=embed)
 
   @commands.command(description='Generate placeholder (and kinda latin) text!')
   @commands.guild_only()
@@ -164,7 +164,7 @@ class RandomCommands(commands.Cog, name=':grey_question: Randomness'):
     lorem_ipsum=lorem_ipsum.replace("b", "")
     embed = discord.Embed(title="Lorem Ipsum Generator", description=lorem_ipsum, color=0x656565, timestamp = ctx.message.created_at)
     embed.set_footer(text=f"Requested By {ctx.author}", icon_url=ctx.author.avatar_url)
-    await ctx.send(embed=embed)
+    await ctx.message.reply(embed=embed)
 
   @commands.command(description='You read the command name :wink:')
   @commands.guild_only()
@@ -182,7 +182,7 @@ class RandomCommands(commands.Cog, name=':grey_question: Randomness'):
         embed = discord.Embed(title="Here's your Dose of a Useless Fact!", description=fact, color=self.bot.main_color)
         embed.set_footer(text=f'Requested By {ctx.author}', icon_url=ctx.author.avatar_url)
 
-        await ctx.send(embed=embed)
+        await ctx.message.reply(embed=embed)
 
   @commands.command(description='I mean, get sometimes right but also random opinions from random people?')
   @commands.guild_only()
@@ -201,7 +201,7 @@ class RandomCommands(commands.Cog, name=':grey_question: Randomness'):
         embed = discord.Embed(title="Here's your Random Opinion!", description=f'\'{opinion}\'\n\n- {author}', color=self.bot.main_color)
         embed.set_footer(text=f'Requested By {ctx.author}', icon_url=ctx.author.avatar_url)
 
-        await ctx.send(embed=embed)
+        await ctx.message.reply(embed=embed)
 
 def setup(bot):
   bot.add_cog(RandomCommands(bot))

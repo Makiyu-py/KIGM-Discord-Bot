@@ -65,8 +65,7 @@ class InfoCommands(commands.Cog, name=':information_source: Informative Commands
     serverCount = len(self.bot.guilds)
     memberCount=len(set(self.bot.get_all_members()))
     embed = discord.Embed(colour=self.bot.main_color, timestamp=ctx.message.created_at)
-    embed.add_field(name='<:python:769448668348416010>Python Version ',   value=pythonVersion)
-    embed.add_field(name='<:discord:769449385670737940>Discord.py Version ',value=dpyVersion)
+
     embed.add_field(name="<:server_boost:769450820076306443>Total Guilds I'm on",      value=serverCount)
     embed.add_field(name="<:members:769449777472471060>Ignorant Friends",      value= memberCount)
     embed.add_field(name='<a:botdev_shine:769445361693491200>Developer', value='<@526616688091987968>')
@@ -79,9 +78,9 @@ class InfoCommands(commands.Cog, name=':information_source: Informative Commands
   @commands.command(description='Get the id of a user!',aliases=['memid','getmemberidof', 'memberid'])
   async def getuserid(self, ctx, member : Optional[discord.Member]=None):
     if member is None:
-      await ctx.send(f"Your user id is `{ctx.author.id}`")
+      await ctx.message.reply(f"Your user id is `{ctx.author.id}`")
     else:
-      await ctx.send(member.name+f"'s user id is  `{str(member.id)}`")
+      await ctx.message.reply(member.name+f"'s user id is  `{str(member.id)}`")
 
   @commands.command(description="get this server's id!", aliases=['serverid', 'serid'])
   @commands.guild_only()
@@ -98,7 +97,7 @@ class InfoCommands(commands.Cog, name=':information_source: Informative Commands
     embed.add_field(name='Image link', value=f'[Click mee]({member.avatar_url})')
     embed.set_author(name=f'Avatar of {member}')
     embed.set_image(url=member.avatar_url)
-    await ctx.send(embed=embed)
+    await ctx.message.reply(embed=embed, mention_author=True)
     
   @commands.command(description="Get info about a member!",aliases=['whothefis', 'memberinfo', 'userinfo'])
   @commands.guild_only()
