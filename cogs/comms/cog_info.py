@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 '''
 
+from datetime import datetime
 from typing import Optional
 import discord
 import platform
@@ -60,8 +61,26 @@ class InfoCommands(commands.Cog, name=':information_source: Informative Commands
 
   @commands.command(aliases=['stat', 'botinfo'], description="Shows my statistics!")
   async def stats(self, ctx):
-    pythonVersion = platform.python_version()
-    dpyVersion = discord.__version__
+
+    # Getting the bot's uptime is much 'time-consuming' than I expected... haha...
+    delta_uptime = datetime.utcnow() - self.bot.launch_time
+    hours, remainder = divmod(int(delta_uptime.total_seconds()), 3600)
+    minutes, seconds = divmod(remainder, 60)
+    days, hours = divmod(hours, 24)
+    uptime_msg = ''
+
+    if days > 0:
+      uptime_msg += f'**{days}d,** '
+
+    if hours > 0:
+      uptime_msg += f'**{hours}h,** '
+
+    if minutes > 0:
+      uptime_msg += f'**{minutes}m,** '
+
+
+    uptime_msg += '{0}**{1}s**'.format("and " if minutes > 0 else "", seconds)
+
     serverCount = len(self.bot.guilds)
     memberCount=len(set(self.bot.get_all_members()))
     embed = discord.Embed(colour=self.bot.main_color, timestamp=ctx.message.created_at)
@@ -69,8 +88,10 @@ class InfoCommands(commands.Cog, name=':information_source: Informative Commands
     embed.add_field(name="<:server_boost:769450820076306443>Total Guilds I'm on",      value=serverCount)
     embed.add_field(name="<:members:769449777472471060>Ignorant Friends",      value= memberCount)
     embed.add_field(name='<a:botdev_shine:769445361693491200>Developer', value='<@526616688091987968>')
+    embed.add_field(name=":alarm_clock: My Uptime", value=uptime_msg)
     embed.add_field(name=':people_hugging:Support Server', value='[Plz join](https://discord.gg/jz4WxkB)')
-    embed.add_field(name="<:invite:769450163671400459>Bot Invite", value="[Invite meee](https://discord.com/api/oauth2/authorize?client_id=763626077292724264&permissions=273115158&scope=bot%20applications.commands)", inline=True )
+    embed.add_field(name="<:invite:769450163671400459>Bot Invite", value="[Invite meee](https://discord.com/api/oauth2/authorize?client_id=763626077292724264&permissions=273115158&scope=bot%20applications.commands)", inline=True)
+
     embed.set_author(name=f"{ctx.bot.user.name} Stats", icon_url=ctx.bot.user.avatar_url)
     embed.set_footer(text=f"As of~~")
     await ctx.send(embed=embed)

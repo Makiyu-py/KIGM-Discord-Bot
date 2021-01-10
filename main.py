@@ -19,6 +19,7 @@ import discord
 from discord.ext import commands, tasks
 
 # Standard Packages
+from datetime import datetime
 import time
 import sys
 import random
@@ -39,6 +40,7 @@ from utils.mongo import DBShortCuts  # Shortcuts for mongodb stuff
 client = commands.Bot(command_prefix=get_prefix, help_command=None,case_insensitive=True, intents=discord.Intents.all(), owner_id=526616688091987968)
 
 client.owner_id = 526616688091987968
+client.launch_time = datetime.utcnow()
 
 # YouTube is hurting my English soo
 client.main_color= 0xf8f8ff
