@@ -39,7 +39,8 @@ class HelpCommands(commands.Cog, name=':bookmark_tabs: Help'):
 
 
   async def cmd_help(self, ctx, command):
-    prefix = self.funcs.server_prefix(ctx, ctx.guild.id)
+    prefix = await self.bot.config.find(ctx.guild.id)
+    prefix = prefix["Bot Prefix"] if prefix is not None and not KeyError else "&"
     embed = discord.Embed(title=f"{str(command).upper()} Help!", description=f"`{prefix}` {syntax(command)}", color = self.bot.main_color)
 
     '''
@@ -83,8 +84,13 @@ class HelpCommands(commands.Cog, name=':bookmark_tabs: Help'):
           commandList += f"\n`{command.name}` - *{command.description}*\n"
 
         else:
-          helpEmbed = discord.Embed(title="All Commands!", color = self.bot.main_color)
-          helpEmbed.set_footer(text=f"Created by Makiyu#4707", icon_url = 'https://cdn.discordapp.com/avatars/526616688091987968/fc88ac5bd50ddabe601fb655e2ba72e0.webp?size=32')
+          prefix = await self.bot.config.find(ctx.guild.id)
+          prefix = prefix["Bot Prefix"] if prefix is not None and not KeyError else "&"
+          helpEmbed = discord.Embed(title="All Commands!", description=':pushpin: My Prefix in this server is **`{}`**'.format(prefix), color = self.bot.main_color)
+          helpEmbed.set_footer(
+            text=f"Created by Makiyu#4707", 
+            icon_url='https://cdn.discordapp.com/avatars/526616688091987968/fc88ac5bd50ddabe601fb655e2ba72e0.webp?size=32'
+            )
           helpEmbed.add_field(name=rl_cog, value=commandList, inline=True)
           HelpList.append(helpEmbed)
 
