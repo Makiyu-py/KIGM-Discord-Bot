@@ -16,13 +16,12 @@ limitations under the License.
 
 from typing import Optional
 from the_universe import syntax
-from the_universe import server_prefix
 import discord
 from discord.ext import commands
 from discord.ext.commands import BucketType, cooldown
 from discord.utils import get
 import asyncio
-from dpymenus import PaginatedMenu
+from utils.paginate import dpyPaginate
 import math
 import re
 import random
@@ -32,14 +31,15 @@ import random
 class HelpCommands(commands.Cog, name=':bookmark_tabs: Help'):
 
   def __init__(self, bot):
-	  self.bot = bot
+    self.bot = bot
+
     
   botid = 763626077292724264
 
 
 
   async def cmd_help(self, ctx, command):
-    prefix = server_prefix(ctx.guild.id)
+    prefix = self.funcs.server_prefix(ctx, ctx.guild.id)
     embed = discord.Embed(title=f"{str(command).upper()} Help!", description=f"`{prefix}` {syntax(command)}", color = self.bot.main_color)
 
     '''
@@ -62,11 +62,11 @@ class HelpCommands(commands.Cog, name=':bookmark_tabs: Help'):
 
     cogs=[c for c in self.bot.cogs.keys()]
 
-    SB_COGS = ['Events', 'Asyncfuncs', 'Tests', ':desktop: Server Managing', 'SlashCommands', 'TopGG']
+    SB_COGS = ['Events', 'Asyncfuncs', 'Tests', ':desktop: Server Managing', 'SlashCommands', 'TopGG', 'Jishaku']
     
     for hidden_cog in SB_COGS:
       cogs.remove(hidden_cog)
-   
+  
 
     if optional_command == None:
       HelpList = []
@@ -83,17 +83,13 @@ class HelpCommands(commands.Cog, name=':bookmark_tabs: Help'):
           commandList += f"\n`{command.name}` - *{command.description}*\n"
 
         else:
-          helpEmbed = discord.Embed(title="All Commands!", description= f'My Prefix on This Server: `{server_prefix(ctx.guild.id)}`', color = self.bot.main_color)
+          helpEmbed = discord.Embed(title="All Commands!", color = self.bot.main_color)
           helpEmbed.set_footer(text=f"Created by Makiyu#4707", icon_url = 'https://cdn.discordapp.com/avatars/526616688091987968/fc88ac5bd50ddabe601fb655e2ba72e0.webp?size=32')
           helpEmbed.add_field(name=rl_cog, value=commandList, inline=True)
           HelpList.append(helpEmbed)
 
       else:
-        menu = (PaginatedMenu(ctx))
-        menu.add_pages(HelpList)
-        menu.set_timeout(50)
-        menu.show_skip_buttons()
-        await menu.open()
+        await dpyPaginate(PageList=HelpList, timeout=50).menustart(ctx)
 
     else:
       if (command := get(self.bot.commands, name=optional_command)):
@@ -153,4 +149,4 @@ class HelpCommands(commands.Cog, name=':bookmark_tabs: Help'):
     await ctx.send(embed=bug_received)
 
 def setup(bot):
-	bot.add_cog(HelpCommands(bot))
+  bot.add_cog(HelpCommands(bot))

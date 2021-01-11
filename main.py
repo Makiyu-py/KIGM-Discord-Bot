@@ -27,30 +27,47 @@ import json
 import os
 
 # 3rd Party Libraries Used
-from termcolor import colored
+from termcolor import colored  # colors oo
 import motor.motor_asyncio
 import asyncio
 
 # Local Packages
-from keep_alive import keep_alive
-from the_universe import get_prefix
+from keep_alive import keep_alive  # Reason why bot is 24/7 thru flask *(remove if forked from GitHub)*
 from utils.mongo import DBShortCuts  # Shortcuts for mongodb stuff
 
 
-client = commands.Bot(command_prefix=get_prefix, help_command=None,case_insensitive=True, intents=discord.Intents.all(), owner_id=526616688091987968)
+async def get_prefix(bot, message):
+    
+    # If dm's
+    if not message.guild:
+        return commands.when_mentioned_or("&")(bot, message)
+
+    try:
+        data = await bot.config.find(message.guild.id)
+
+        # Make sure we have a useable prefix
+        if not data or "Bot Prefix" not in data:
+            return commands.when_mentioned_or("&")(bot, message)
+
+        return commands.when_mentioned_or(data["Bot Prefix"])(bot, message)
+
+    except:
+        return commands.when_mentioned_or("&")(bot, message)
+
+
+client = commands.AutoShardedBot(command_prefix=get_prefix, help_command=None, description='The most fun you\'ll ever have with a bot!', case_insensitive=True, intents=discord.Intents.all(), owner_id=526616688091987968)
+
 
 client.owner_id = 526616688091987968
-client.launch_time = datetime.utcnow()
+client.launch_time = datetime.utcnow()  # for stats cmd for getting bot's uptime
 
 # YouTube is hurting my English soo
 client.main_color= 0xf8f8ff
 client.main_colour= 0xf8f8ff
 
-client.owner = client.get_user(client.owner_id)
 
 @client.event
 async def on_ready():
-  await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="&help / @Kid In Google Images (for more info!)"))
   print(colored("-------------------------------------", 'red'))
   for e in colored("Now Initializing Database. . .", 'grey', 'on_green'):
     sys.stdout.write(e)
@@ -96,173 +113,27 @@ async def on_ready():
     sys.stdout.flush()
     time.sleep(0.08)
   print(colored("\n-------------------------------------", 'blue'))
+  await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"&help / @{client.user.name} (for more info!)"))
   
-  
+
 @client.event
 async def on_guild_join(guild):
 
-	with open("databases/Settings/prefixes.json", "r") as f:
-		prefixes = json.load(f)
-
-	prefixes[str(guild.id)] = "&"
-
-	with open("databases/Settings/prefixes.json", "w") as f:
-		json.dump(prefixes, f, indent=4)
+	await client.config.upsert({"_id" : guild.id, "Bot Prefix" : "&"})
 
 
 @client.event
 async def on_guild_remove(guild):
 
-	with open("databases/Settings/prefixes.json", "r") as f:
-		prefixes = json.load(f)
-
-	prefixes.pop(str(guild.id))
+	await client.config.delete(guild.id)
 
 
 @client.command(hidden=True)
 async def blacklist(ctx, userid: int, *, list_name):
 
-  await client.bl.upsert({"_id" : list_name.lower()}, {"$addToSet": {"Blacklisted": [userid]}})
+  await client.bl.upsert({"_id" : list_name.lower(), "$addToSet": {"Blacklisted": userid}})
 
   await ctx.send(f"User is now blacklisted in {list_name}")
-
-@client.command(hidden=True)
-async def load(ctx, extension):
-  '''
-  Nothing to be seen...
-  '''
-  if str(ctx.author.id) == '526616688091987968':
-    extension = extension.lower()
-    await ctx.send(f"Loading `{extension}`")
-    if extension.startswith("cog_") and not extension.endswith(".py"):
-      try:
-        client.load_extension(f'cogs.comms.{extension}')
-      except commands.ExtensionNotFound:
-        client.load_extension(f'cogs.other.{extension}')
-      except:
-        await ctx.send(f"Execution Failed. Reason: Cog `{extension}` could not be loaded.")
-        return
-      finally:
-        await ctx.send(f"`{extension}` has been successfully loaded!")
-
-    elif extension.endswith(".py"):
-      try:
-        client.load_extension(f'cogs.comms.{extension[:-3]}')
-      except commands.ExtensionAlreadyLoaded:
-        await ctx.send("Cog already loaded silly!")
-      except commands.ExtensionNotFound:
-        client.load_extension(f'cogs.other.{extension[:-3]}')
-      except:
-        await ctx.send(f"Execution Failed. Reason: Cog `{extension}` could not be loaded.")
-        return
-      finally:
-        await ctx.send(f"`{extension}` has been successfully loaded!")
-    else:
-      await ctx.send('Execution Failed. Reason: Unknown Cog')
-
-  else:
-    print(
-		    f"{ctx.author.id} attempted to load an extension named {extension}.\n----------------------------------"
-		)
-    return
-
-
-@client.command(hidden=True)
-async def unload(ctx, extension):
-  '''
-  Nothing to be seen...
-  '''
-  if str(ctx.author.id) == '526616688091987968':
-    extension = extension.lower()
-    await ctx.send(f"Unloading `{extension}`")
-    if extension.endswith(".py") and extension.startswith("cog_"):
-      try:
-        client.unload_extension(f'cogs.comms.{extension}')
-      except commands.ExtensionNotLoaded:
-        client.unload_extension(f'cogs.other.{extension}')
-      except:
-        await ctx.send(f"Execution Failed. Reason: Cog `{extension}` could not be unloaded.")
-        return
-      finally:
-        await ctx.send(f"`{extension}` has been successfully unloaded!")
-
-    elif extension.startswith("cog_") and not extension.endswith(".py"):
-      try:
-        client.unload_extension(f'cogs.comms.{extension}')
-      except commands.ExtensionNotLoaded:
-        client.unload_extension(f'cogs.other.{extension}')
-      except:
-        await ctx.send(f"Execution Failed. Reason: Cog `{extension}` could not be unloaded.")
-        return
-      finally:
-        await ctx.send(f"`{extension}` has been successfully unloaded!")
-
-    else:
-      await ctx.send('Excetuion Failed. Reason: Unknown Cog')
-
-  else:
-    print(
-        f"{ctx.author.id} attempted to unload an extension named {extension}.\n----------------------------------"
-        )
-    return
-
-
-@client.command(aliases=['rl'], hidden=True)
-async def reload(ctx, cog):
-	'''
-	Nothing to be seen...
-	'''
-	if str(ctx.author.id) == '526616688091987968':
-		await ctx.send("Reload starting...")
-		cog = cog.lower()
-
-		if cog == 'all':
-			await ctx.send("Reloading all cogs...")
-			for filename in os.listdir('./cogs/'):
-				if filename.endswith('.py'):
-					client.unload_extension(f'cogs.comms.{filename[:-3]}')
-					client.load_extension(f'cogs.comms.{filename[:-3]}')
-					client.unload_extension(f'cogs.other.{filename[:-3]}')
-					client.load_extension(f'cogs.other.{filename[:-3]}')
-			else:
-				await ctx.send('All cogs have been reloaded!')
-
-		elif cog.endswith(".py") and cog.startswith("cog_"):
-			await ctx.send(f"Reloading `{cog}`...")
-			try:
-				client.unload_extension(f'cogs.comms.{cog[:-3]}')
-				client.load_extension(f'cogs.comms.{cog[:-3]}')
-			except commands.ExtensionNotLoaded:
-				client.unload_extension(f'cogs.other.{cog[:-3]}')
-				client.load_extension(f'cogs.other.{cog[:-3]}')
-			except:
-				await ctx.send(f"Excetuion Failed. Reason: Cog `{cog}` could not be loaded.")
-				return
-			finally:
-			  await ctx.send(f'the `{cog}` cog has now been reloaded!')
-
-		elif cog.startswith("cog_") and not cog.endswith(".py"):
-			await ctx.send(f"Reloading `{cog}`...")
-			try:
-				client.unload_extension(f'cogs.comms.{cog}')
-				client.load_extension(f'cogs.comms.{cog}')
-			except commands.ExtensionNotLoaded:
-				client.unload_extension(f'cogs.other.{cog}')
-				client.load_extension(f'cogs.other.{cog}')
-			except:
-				await ctx.send(f"Excetuion Failed. Reason: Cog `{cog}` could not be loaded.")
-				raise Exception
-				return
-			finally:
-			  await ctx.send(f'the `{cog}` cog has now been reloaded!')
-
-		else:
-			await ctx.send('Excetuion Failed. Reason: Unknown Cog')
-	else:
-		print(
-		    f"{ctx.author.id} attempted to reload an extension named {cog}.\n----------------------------------"
-		)
-		return
 
 
 @client.command(name="listcogs", aliases=['lc'], hidden=True)
@@ -299,5 +170,6 @@ print(colored("------------------------------------------", 'yellow'))
 
 
 keep_alive()  # again, pls remove this line if u forked this from GitHub.
+client.load_extension('jishaku')
 token = os.environ.get("DISCORD_BOT_SECRET")
 client.run(token)

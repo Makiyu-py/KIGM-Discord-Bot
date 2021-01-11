@@ -59,15 +59,7 @@ class Settings(commands.Cog, name=':gear: Settings'):
       ctx.command.reset_cooldown(ctx)
       return
       
-    
-    # Changing this to MongoDB soon
-    with open("databases/Settings/prefixes.json", "r") as f:
-      prefixes= json.load(f)
-
-    prefixes[str(ctx.guild.id)] = new_prefix
-    with open("databases/Settings/prefixes.json", "w") as f:
-      json.dump(prefixes,f)
-    
+    await self.bot.config.upsert({"_id" : ctx.guild.id, "Bot Prefix" : new_prefix})
     await ctx.message.reply(f"Prefix now updated with `{new_prefix}`!")
 
 def setup(bot):

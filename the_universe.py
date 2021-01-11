@@ -164,18 +164,6 @@ def syntax(command):
 
   return f'`{cmd_and_aliases} {params}`'
 
-def server_prefix(guild_id):
-  with open("databases/Settings/prefixes.json", 'r') as f:
-    datap = json.load(f)
-
-    try:
-      serverpre = datap[str(guild_id)]
-
-    except KeyError or AttributeError:
-      return "&"
-      
-    else:
-      return serverpre
 
 def clapdacheeks(msg):
   checkmode = msg.split(",")

@@ -27,15 +27,6 @@ class Giveaway(commands.Cog, name=':tada: Giveaway Commands'):
   def __init__(self, bot):
 	  self.bot = bot
 
-  def roledescription(self):
-    with open("databases/Settings/Role/giveawayrole.json", "r") as f:
-      roley = json.load(f)
-
-    if self.guild.id in roley:
-      givearole = get(self.guild.roles, roley[self.guild.id])
-      return f"{givearole.mention} role"
-    else:
-      return "giveaway role from the `setgiveawayrole` command"
 
   @commands.command(description=f'Start a giveaway! \n(only users with the specified role from the `setgiveawayrole` command can only start.)', aliases=['g_start'])
   @commands.guild_only()

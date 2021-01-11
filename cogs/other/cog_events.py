@@ -16,8 +16,6 @@ limitations under the License.
 
 from discord.ext import commands
 from discord.utils import get
-from the_universe import get_prefix
-from the_universe import server_prefix
 import math
 import discord
 import json
@@ -33,7 +31,7 @@ discordboatsite = 'https://discord.boats/bot/'
 class Events(commands.Cog):
 
   def __init__(self, bot):
-	  self.bot = bot
+    self.bot = bot
 
 
   @commands.Cog.listener()
@@ -140,11 +138,12 @@ class Events(commands.Cog):
   @commands.Cog.listener()
   async def on_message(self, ctx):
     if not ctx.author.bot:
-      if ctx.content.startswith(f"<@!{botid}>"):
+      if ctx.content == f"<@!{botid}>":
         if ctx.author.id == botid:
           return
         else:
-          serverprefix = server_prefix(ctx.guild.id)
+          serverprefix = await self.bot.config.find(ctx.guild.id) or "&"
+          serverprefix = serverprefix["Bot Prefix"] or "&"
           await ctx.channel.send(f"**Thanks for pinging me!** :mailbox_with_mail:\n\n> :man_astronaut: My prefix in this server is `{serverprefix}`\n\n> :face_with_monocle: Use the `{serverprefix}help [command]` to know more about the commands I have! \n\n> :thumbsup: Liking me so far? You can vote me on:\n> \n> :sailboat: **discord.boats** - **https://discord.boats/bot/763626077292724264**\n> \n> :robot: **top.gg** - **https://top.gg/bot/763626077292724264/vote**")
           
       chance = random.randint(1, 15)
@@ -233,4 +232,4 @@ class Events(commands.Cog):
 
 
 def setup(bot):
-	bot.add_cog(Events(bot))
+  bot.add_cog(Events(bot))

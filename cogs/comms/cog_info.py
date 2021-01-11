@@ -70,13 +70,13 @@ class InfoCommands(commands.Cog, name=':information_source: Informative Commands
     uptime_msg = ''
 
     if days > 0:
-      uptime_msg += f'**{days}d,** '
+      uptime_msg += f'**{days}d**, '
 
     if hours > 0:
-      uptime_msg += f'**{hours}h,** '
+      uptime_msg += f'**{hours}h**, '
 
     if minutes > 0:
-      uptime_msg += f'**{minutes}m,** '
+      uptime_msg += f'**{minutes}m**, '
 
 
     uptime_msg += '{0}**{1}s**'.format("and " if minutes > 0 else "", seconds)

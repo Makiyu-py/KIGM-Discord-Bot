@@ -56,5 +56,17 @@ class Asyncfuncs(commands.Cog):
     return await self.get_user_data(user)
 
 
+  async def server_prefix(ctx, guild_id):
+    datap = ctx.config.find(guild_id)
+
+    try:
+      serverpre = datap["Bot Prefix"]
+
+    except KeyError or AttributeError:
+      return "&"
+      
+    else:
+      return serverpre
+
 def setup(bot):
   bot.add_cog(Asyncfuncs(bot))
