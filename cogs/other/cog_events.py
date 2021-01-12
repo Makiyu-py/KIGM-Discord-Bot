@@ -46,7 +46,7 @@ class Events(commands.Cog):
       if cog._get_overridden_method(cog.cog_command_error) is not None:
         return
 
-    ignored = (commands.CommandNotFound, commands.NotOwner)
+    ignored = (commands.CommandNotFound, commands.NotOwner, commands.CheckFailure)
 
     # Allows us to check for original exceptions raised and sent to CommandInvokeError.
     # If nothing is found. We keep the exception passed to on_command_error.
@@ -142,7 +142,7 @@ class Events(commands.Cog):
           return
         else:
           serverprefix = await self.bot.config.find(ctx.guild.id)
-          serverprefix = serverprefix["Bot Prefix"] if serverprefix is not None and not KeyError else "&"
+          serverprefix = serverprefix["Bot Prefix"] or "&"
           await ctx.channel.send(f"**Thanks for pinging me!** :mailbox_with_mail:\n\n> :man_astronaut: My prefix in this server is `{serverprefix}`\n\n> :face_with_monocle: Use the `{serverprefix}help [command]` to know more about the commands I have! \n\n> :thumbsup: Liking me so far? You can vote me on:\n> \n> :sailboat: **discord.boats** - **https://discord.boats/bot/763626077292724264**\n> \n> :robot: **top.gg** - **https://top.gg/bot/763626077292724264/vote**")
           
       chance = random.randint(1, 15)

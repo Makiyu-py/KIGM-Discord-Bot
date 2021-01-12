@@ -40,7 +40,7 @@ class HelpCommands(commands.Cog, name=':bookmark_tabs: Help'):
 
   async def cmd_help(self, ctx, command):
     prefix = await self.bot.config.find(ctx.guild.id)
-    prefix = prefix["Bot Prefix"] if prefix is not None and not KeyError else "&"
+    prefix = prefix["Bot Prefix"] or "&"
     embed = discord.Embed(title=f"{str(command).upper()} Help!", description=f"`{prefix}` {syntax(command)}", color = self.bot.main_color)
 
     '''
@@ -85,7 +85,7 @@ class HelpCommands(commands.Cog, name=':bookmark_tabs: Help'):
 
         else:
           prefix = await self.bot.config.find(ctx.guild.id)
-          prefix = prefix["Bot Prefix"] if prefix is not None and not KeyError else "&"
+          prefix = prefix["Bot Prefix"] or "&"
           helpEmbed = discord.Embed(title="All Commands!", description=':pushpin: My Prefix in this server is **`{}`**'.format(prefix), color = self.bot.main_color)
           helpEmbed.set_footer(
             text=f"Created by Makiyu#4707", 
