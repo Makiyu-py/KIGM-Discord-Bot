@@ -58,13 +58,15 @@ def text_to_owo(text):
 
 def british_accent(brsentence):
 
-  brsentence=brsentence.replace("it was ", "it was quite")
-  brsentence=brsentence.replace("friend", "mate").replace("pal", "mate").replace("buddy", "mate").replace("person", "mate").replace("man", "mate").replace("people", "mates")
-  brsentence=brsentence.replace("standing", "stood")
-  brsentence=brsentence.replace("sitting", "sat")
-  brsentence = brsentence.replace("it was", "it was quite ")
-  brsentence=brsentence.replace("o", "oh")
-  brsentence=brsentence.replace("ee", "ea")
+  brsentence = brsentence.replace("it was", "it was quite")
+
+  brsentence = brsentence.replace("friend", "mate").replace("pal", "mate").replace("buddy", "mate").replace("person", "mate").replace("man", "mate").replace("people", "mates")
+  brsentence = brsentence.replace("standing", "stood")
+  brsentence = brsentence.replace("sitting", "sat")
+
+  brsentence = brsentence.replace("o", "oh")
+  brsentence = brsentence.replace("ee", "ea")
+
   brsentence = brsentence.replace("er ", "-a ").replace("er", "-a").replace("or ", "-a ").replace("or", "-a").replace("ar ", "-a ").replace("ar", "-a")
   brsentence = brsentence.replace("a", "ah")
 
@@ -104,6 +106,7 @@ def ttoemoji(sentence):
   sentence=sentence.replace("X", random.choice(ehks)).replace("x",random.choice(ehks))
   sentence=sentence.replace("Y", " 🇾").replace("y"," 🇾")
   sentence=sentence.replace("Z", " 🇿").replace("z"," 🇿")
+
   sentence=sentence.replace("1", " :one:")
   sentence=sentence.replace("2", " :two:")
   sentence=sentence.replace("3", " :three:")
@@ -158,7 +161,7 @@ def syntax(command):
 
   for key, value in command.params.items():
     if key not in ("self", "ctx"):
-      key.replace("_", " ")
+      key = key.replace("_", " ")
       params.append(f"[{key}]" if "NoneType" in str(value) else f"<{key}>")
 
   params = " ".join(params)
