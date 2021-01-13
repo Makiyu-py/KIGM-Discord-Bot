@@ -16,62 +16,47 @@ limitations under the License.
 
 from typing import Optional
 import discord
-import platform
 import json
 from aiohttp import request
 import random
 import the_universe
+from sr_api import Client
 from loremipsum import get_sentences
 from discord.ext import commands
 
 class RandomCommands(commands.Cog, name=':grey_question: Randomness'):
   def __init__(self, bot):
 	  self.bot = bot
+	  self.sr = Client()
 
-  '''
+  
   @commands.command(aliases=['ytcomment'], description='Make a *fake* YouTube comment!')
   @commands.guild_only()
   async def youtubecomment(self, ctx, *, comment):
-    with open("databases/Other/APIS.json", 'r') as f:
-      API = json.load(f)
+    YTAPI = self.sr.youtube_comment(str(ctx.author.avatar_url).replace(".webp", ".png"), ctx.author.name, comment)
 
-    avatar = str(ctx.author.avatar_url).replace('.webp', '.png')
-    comment = comment.replace(' ', '+')
-    username=ctx.author.name
+    embed = discord.Embed(title="Here's your Comment!", description=f'Hope you liked it!\n[Comment Link]({YTAPI.url})',color=self.bot.main_colour)
+    embed.set_footer(text=f'{ctx.author} | Powered by https://some-random-api.ml/', icon_url=ctx.author.avatar_url)
 
-    YTAPI = str(API['YTComment']).format(avatar, comment, username)
+    embed.set_image(url=YTAPI.url)
 
-    async with request("GET", YTAPI, headers={}) as response:
-      if response.status == 200:
-
-        embed = discord.Embed(title="Here's your Comment!", description=f'Hope you liked it!\n[Comment Link]({YTAPI})',color=self.bot.main_colour)
-        embed.set_footer(text=f'{ctx.author} | Powered by https://some-random-api.ml/', icon_url=ctx.author.avatar_url)
-
-        embed.set_image(url=YTAPI)
-
-        await ctx.message.reply(embed=embed)
+    await ctx.message.reply(embed=embed)
         
-  '''
+  
   @commands.command(aliases=['pfpbegay'], description='Make your avatar go 🌈 brr 🌈')
   async def rainbowpfp(self, ctx, user: Optional[discord.Member]=None):
     if user is None:
       user= ctx.author
 
-    with open("databases/Other/APIS.json", 'r') as f:
-      API = json.load(f)
+    Rainbowpfp = self.sr.filter("gay", str(ctx.author.avatar_url).replace(".webp", ".png"))
+    Rainbowpfp = Rainbowpfp.url
 
-    avatar = str(user.avatar_url).replace('.webp', '.png')
-    Rainbowpfp = str(API['RainbowPFP'] + avatar)
+    embed = discord.Embed(title="Here! 🌈", description=f'[avatar link]({Rainbowpfp})',color=self.bot.main_colour)
+    embed.set_footer(text=f'{ctx.author} | Powered by https://some-random-api.ml/', icon_url=ctx.author.avatar_url)
 
-    async with request("GET", Rainbowpfp, headers={}) as response:
-      if response.status == 200:
+    embed.set_image(url=Rainbowpfp)
 
-        embed = discord.Embed(title="Here! 🌈", description=f'[avatar link]({Rainbowpfp})',color=self.bot.main_colour)
-        embed.set_footer(text=f'{ctx.author} | Powered by https://some-random-api.ml/', icon_url=ctx.author.avatar_url)
-
-        embed.set_image(url=Rainbowpfp)
-
-        await ctx.message.reply(embed=embed)
+    await ctx.message.reply(embed=embed)
 
   @commands.command(aliases=['jail'], description='Lock ur avatar to jail :P')
   async def jailify(self, ctx, user: Optional[discord.Member]=None):
@@ -134,22 +119,17 @@ class RandomCommands(commands.Cog, name=':grey_question: Randomness'):
     if user is None:
       user = ctx.author
 
-    with open("databases/Other/APIS.json", 'r') as f:
-      API = json.load(f)
-
     avatar = str(user.avatar_url).replace('.webp', '.png').replace('.gif', '.png').replace('?size=1024', '?size=512')
 
-    UFAPI = f"{API['Wasted']}{avatar}"
+    UFAPI = self.sr.filter("wasted", avatar)
+    UFAPI = UFAPI.url
 
-    async with request("GET", UFAPI, headers={}) as response:
-      if response.status == 200:
+    embed = discord.Embed(title="w a s t e d .", description=f'[T h e  i m a g e  l i n k]({UFAPI})',color=self.bot.main_color)
+    embed.set_footer(text=f'{ctx.author} | Powered by https://some-random-api.ml/', icon_url=ctx.author.avatar_url)
 
-        embed = discord.Embed(title="w a s t e d .", description=f'[T h e  i m a g e  l i n k]({UFAPI})',color=self.bot.main_color)
-        embed.set_footer(text=f'{ctx.author} | Powered by https://some-random-api.ml/', icon_url=ctx.author.avatar_url)
+    embed.set_image(url=UFAPI)
 
-        embed.set_image(url=UFAPI)
-
-        await ctx.message.reply(embed=embed)
+    await ctx.message.reply(embed=embed)
 
   @commands.command(description='Generate placeholder (and kinda latin) text!')
   @commands.guild_only()

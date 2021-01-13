@@ -17,10 +17,9 @@ limitations under the License.
 from typing import Optional
 import discord
 import asyncio
-from discord.utils import get
 from discord.ext import commands
 from discord.ext.commands import BucketType, cooldown
-import json
+
 
 class ModCommands(commands.Cog, name=':hammer_pick: Moderator Commands'):
 

@@ -17,7 +17,6 @@ limitations under the License.
 import discord
 import asyncio
 import random
-import json
 from discord.utils import get
 from discord.ext import commands
 from the_universe import convert

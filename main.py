@@ -22,14 +22,11 @@ from discord.ext import commands, tasks
 from datetime import datetime
 import time
 import sys
-import random
-import json
 import os
 
 # 3rd Party Libraries Used
 from termcolor import colored  # colors oo
 import motor.motor_asyncio
-import asyncio
 
 # Local Packages
 from keep_alive import keep_alive  # Reason why bot is 24/7 thru flask *(remove if forked from GitHub)*
