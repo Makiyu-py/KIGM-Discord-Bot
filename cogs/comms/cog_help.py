@@ -88,7 +88,7 @@ class HelpCommands(commands.Cog, name=':bookmark_tabs: Help'):
           prefix = prefix["Bot Prefix"] or "&"
           helpEmbed = discord.Embed(title="All Commands!", description=':pushpin: My Prefix in this server is **`{}`**'.format(prefix), color = self.bot.main_color)
           helpEmbed.set_footer(
-            text=f"Created by Makiyu#4707", 
+            text=f"Created by Makiyu#4707 | Page {len(HelpList) + 1} of {len(cogs)}", 
             icon_url='https://cdn.discordapp.com/avatars/526616688091987968/fc88ac5bd50ddabe601fb655e2ba72e0.webp?size=32'
             )
           helpEmbed.add_field(name=rl_cog, value=commandList, inline=True)

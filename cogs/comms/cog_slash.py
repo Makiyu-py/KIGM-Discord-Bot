@@ -28,7 +28,7 @@ class SlashCommands(commands.Cog):
         Falseness += 1
       
     if Falseness == len(starts):
-      await ctx.send(content='Hm, it seems like your question is **not a yes/no-type of question**, pls try again. :)', hidden=True)
+      await ctx.send(3, content='Hm, it seems like your question is **not a yes/no-type of question**, pls try again. :)', hidden=True)
       return
 
     answers = [

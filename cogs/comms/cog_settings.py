@@ -18,7 +18,7 @@ from typing import Optional
 import discord
 from discord.ext import commands
 from discord.ext.commands import BucketType, cooldown
-import json
+
 
 class Settings(commands.Cog, name=':gear: Settings'):
 
