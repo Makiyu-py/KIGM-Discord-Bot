@@ -39,6 +39,7 @@ def last_replace(s, old, new):
 def text_to_owo(text):
     smileys = [';;w;;', '^w^', '>w<', 'UwU', '(・`ω\´・)', '(´・ω・\`)']
 
+    text = text.replace("rank", "Ⓡank").replace("Rank", "Ⓡank")
     text = text.replace('L', 'W').replace('l', 'w')
     text = text.replace('R', 'W').replace('r', 'w')
 
@@ -54,8 +55,10 @@ def text_to_owo(text):
         if 'N{}'.format(v) in text:
             text = text.replace('N{}'.format(v), 'N{}{}'.format('Y' if v.isupper() else 'y', v))
 
+    text = text.replace("Ⓡank", "rank")
+    
     return text
-
+    
 def british_accent(brsentence):
 
   brsentence = brsentence.replace("it was", "it was quite")
