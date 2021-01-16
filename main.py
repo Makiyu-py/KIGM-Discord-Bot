@@ -116,7 +116,7 @@ async def on_ready():
 @client.event
 async def on_guild_join(guild):
 
-	await client.config.upsert({"_id" : guild.id, "Bot Prefix" : "&"})
+	await client.config.upsert({"_id" : guild.id, "Bot Prefix" : "&", "AutoResponse Mode": False})
 
 
 @client.event

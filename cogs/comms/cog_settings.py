@@ -25,6 +25,26 @@ class Settings(commands.Cog, name=':gear: Settings'):
   def __init__(self, bot):
 	  self.bot = bot
 
+  @commands.command(description='Set my auto-response/auto-react settings! \n(only admins have access to this command.)',aliases=['set_auto'])
+  @commands.guild_only()
+  @cooldown(1, 600, BucketType.guild)
+  @commands.has_permissions(administrator = True)
+  async def set_autoresponse(self, ctx, on_or_off: str):
+    if not on_or_off.lower() in ('on', 'off', 'true', 'false'):
+      await ctx.send("**ERROR!**\nYou must only input on/off when setting up autoresponse!")
+      return
+
+    msg = 'Auto-response mode is now turned *{}*!'
+
+    if on_or_off.lower() in ('on', 'true'):
+      await self.bot.config.upsert({"_id" : ctx.guild.id, "AutoResponse Mode" : True})
+      await ctx.send(msg.format('on'))
+
+    
+    elif on_or_off.lower() in ('off', 'false'):
+      await self.bot.config.upsert({"_id" : ctx.guild.id, "AutoResponse Mode" : False})
+      await ctx.send(msg.format('off'))
+
   @commands.command(description='Set your mute role! \n(only users with manage roles have access to this command.)', aliases=['setmuterole', 'setmute'])
   @commands.guild_only()
   @cooldown(1, 600, BucketType.guild)

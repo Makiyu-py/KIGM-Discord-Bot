@@ -136,98 +136,39 @@ class Events(commands.Cog):
 
   @commands.Cog.listener()
   async def on_message(self, ctx):
-    if not ctx.author.bot:
+    if ctx.guild and not ctx.author.bot:
       if ctx.content == f"<@!{botid}>":
-        if ctx.author.id == botid:
-          return
-        else:
-          serverprefix = await self.bot.config.find(ctx.guild.id)
-          serverprefix = serverprefix["Bot Prefix"] or "&"
-          await ctx.channel.send(f"**Thanks for pinging me!** :mailbox_with_mail:\n\n> :man_astronaut: My prefix in this server is `{serverprefix}`\n\n> :face_with_monocle: Use the `{serverprefix}help [command]` to know more about the commands I have! \n\n> :thumbsup: Liking me so far? You can vote me on:\n> \n> :sailboat: **discord.boats** - **https://discord.boats/bot/763626077292724264**\n> \n> :robot: **top.gg** - **https://top.gg/bot/763626077292724264/vote**")
+        serverprefix = await self.bot.config.find(ctx.guild.id)
+        serverprefix = serverprefix["Bot Prefix"] or "&"
+        await ctx.channel.send(f"**Thanks for pinging me!** :mailbox_with_mail:\n\n> :man_astronaut: My prefix in this server is `{serverprefix}`\n\n> :face_with_monocle: Use the `{serverprefix}help [command]` to know more about the commands I have! \n\n> :thumbsup: Liking me so far? You can vote me on:\n> \n> :sailboat: **discord.boats** - **https://discord.boats/bot/763626077292724264 **\n> \n> :robot: **top.gg** - **https://top.gg/bot/763626077292724264/vote **")
+        return
           
-      chance = random.randint(1, 15)
-      if chance == 11:
+      chance = random.randint(1, 8)
+      g_data = await ctx.bot.config.find(ctx.guild.id)
+      if g_data['AutoResponse Mode'] and chance == random.randint(1, 8):
+
         # auto-reacts
-
-        if ctx.content.startswith('sad '):
-          if ctx.author.id == botid:
-            return
-          else:
-            await ctx.add_reaction('<:Sadge:770201772228083712>')
-    
-        if ctx.content.startswith('Sad '):
-          if ctx.author.id == botid:
-            return
-          else:
-            await ctx.add_reaction('<:Sadge:770201772228083712>')
-        
-        if ctx.content.startswith('Sadge '):
-          if ctx.author.id == botid:
-            return
-          else:
-            await ctx.add_reaction('<:Sadge:770201772228083712>')
-
-        if ctx.content.startswith('sadge '):
-          if ctx.author.id == botid:
-            return
-          else:
-            await ctx.add_reaction('<:Sadge:770201772228083712>')
+        if ctx.content.lower().startswith('sadge '):
+          await ctx.add_reaction('<:Sadge:770201772228083712>')
             
-        if ctx.content.startswith('hm'):
-          if ctx.author.id == botid:
-            return
-          else:
-            await ctx.add_reaction('<:LuigiHmm:760444048523395103>')
+        elif ctx.content.lower().startswith('hm'):
+          await ctx.add_reaction('<:LuigiHmm:760444048523395103>')
 
-        if ctx.content.startswith('Hm'):
-          if ctx.author.id == botid:
-            return
-          else:
-            await ctx.add_reaction('<:LuigiHmm:760444048523395103>')
-
-        if 'muah' in ctx.content:
-          if ctx.author.id == botid:
-            return
-          else:
-            await ctx.add_reaction('<:chefkiss:760770186063118356>')
-
-        if 'Muah' in ctx.content:
-          if ctx.author.id == botid:
-            return
-          else:
-            await ctx.add_reaction('<:chefkiss:760770186063118356>')
+        elif 'muah' in ctx.content.lower():
+          await ctx.add_reaction('<:chefkiss:760770186063118356>')
             
-        if 'AYAYA' in ctx.content:
-          if ctx.author.id == botid:
-            return
-          else:
-            await ctx.add_reaction('<:AYAYA:767895991218077697>')
+        elif 'AYAYA' in ctx.content.upper():
+          await ctx.add_reaction('<:AYAYA:767895991218077697>')
 
-        if 'ayaya' in ctx.content:
-          if ctx.author.id == botid:
-            return
-          else:
-            await ctx.add_reaction('<:AYAYA:767895991218077697>')
-
-        if '@everyone' in ctx.content:
+        elif '@everyone' in ctx.content:
           await ctx.add_reaction('<:peepoping:760446389917319208>')
 
-        if '@here' in ctx.content:
+        elif '@here' in ctx.content:
           await ctx.add_reaction('<:peepoping:760446389917319208>')
           
         #auto-sends
-
-        if ctx.content.startswith('why'):
-          if ctx.author.id == botid:
-            return
-          else:
-            await ctx.channel.send('*idk*    ¯\_(ツ)_/¯')
-
-        if ctx.content.startswith('Why'):
-          if ctx.author.id == botid:
-            return
-          else:
-            await ctx.channel.send('*idk*    ¯\_(ツ)_/¯')
+        elif ctx.content.lower().startswith('why'):
+          await ctx.channel.send('*idk*    ¯\_(ツ)_/¯')
 
 
 def setup(bot):
