@@ -27,7 +27,7 @@ class Settings(commands.Cog, name=':gear: Settings'):
 
   @commands.command(description='Set my auto-response/auto-react settings! \n(only admins have access to this command.)',aliases=['set_auto'])
   @commands.guild_only()
-  @cooldown(1, 600, BucketType.guild)
+  @cooldown(1, 120, BucketType.guild)
   @commands.has_permissions(administrator = True)
   async def set_autoresponse(self, ctx, on_or_off: str):
     if not on_or_off.lower() in ('on', 'off', 'true', 'false'):

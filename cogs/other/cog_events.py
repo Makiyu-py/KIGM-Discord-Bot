@@ -144,8 +144,18 @@ class Events(commands.Cog):
         return
           
       chance = random.randint(1, 8)
-      g_data = await ctx.bot.config.find(ctx.guild.id)
-      if g_data['AutoResponse Mode'] and chance == random.randint(1, 8):
+      g_data = await self.bot.config.find(ctx.guild.id)
+
+      if g_data is not None:
+        if 'AutoResponse Mode' in g_data:
+          autores = g_data['AutoResponse Mode']
+        else:
+          autores = False
+
+      else:
+        autores = False
+
+      if autores and chance == random.randint(1, 8):
 
         # auto-reacts
         if ctx.content.lower().startswith('sadge '):
@@ -157,7 +167,7 @@ class Events(commands.Cog):
         elif 'muah' in ctx.content.lower():
           await ctx.add_reaction('<:chefkiss:760770186063118356>')
             
-        elif 'AYAYA' in ctx.content.upper():
+        elif ctx.content.upper() == 'AYAYA':
           await ctx.add_reaction('<:AYAYA:767895991218077697>')
 
         elif '@everyone' in ctx.content:
