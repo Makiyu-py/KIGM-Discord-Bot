@@ -34,7 +34,7 @@ class Settings(commands.Cog, name=':gear: Settings'):
       await ctx.send("**ERROR!**\nYou must only input on/off when setting up autoresponse!")
       return
 
-    msg = 'Auto-response mode is now turned *{}*!'
+    msg = 'Auto-response mode is now turned {}!'
 
     if on_or_off.lower() in ('on', 'true'):
       await self.bot.config.upsert({"_id" : ctx.guild.id, "AutoResponse Mode" : True})

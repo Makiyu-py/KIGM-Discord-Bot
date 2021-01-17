@@ -189,7 +189,7 @@ class Economy(commands.Cog, name=':euro: Economy System'):
     # bal = await self.ecofunc.update_eco(member)
 
     # if bal[0] < 40:
-    #   await ctx.send("**Member doesn't have that much money to get robbed!** Poor guy...\n(person must have at least 70 Nitro Shards <a:boost_evolve:769448461824163870> in order to be robbable.)")
+    #   await ctx.send("**Member doesn't have that much money to get robbed!** Poor guy...\n(person must have at least 40 Nitro Shards <a:boost_evolve:769448461824163870> in order to be robbable.)")
     #   ctx.command.reset_cooldown(ctx)
     #   return
 

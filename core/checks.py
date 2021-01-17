@@ -50,7 +50,7 @@ def voters_only():
     j = dbl.DBLClient(ctx.bot, os.environ.get("DBL_SECRET"))
     usr_vote = await j.get_user_vote(ctx.author.id)
 
-    await j.close()
+    await j.close()  # idk I get annoyed sometimes with the warnings on the console
 
     if usr_vote:
       return True

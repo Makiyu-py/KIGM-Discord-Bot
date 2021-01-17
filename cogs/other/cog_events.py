@@ -121,18 +121,16 @@ class Events(commands.Cog):
 
   @commands.Cog.listener()
   async def on_command_completion(self, ctx):
-    if not ctx.command.qualified_name in ['load', 'unload', 'reload', 'blacklist', 'listcogs', 'createtag', 'alltags', 'tag', 'guess_the_number', 'hackerman', 'makeexclusivechannel', 'slowmode', 'delete_textchannel']:
+    if not ctx.command.qualified_name in ['blacklist', 'listcogs', 'createtag', 'alltags', 'tag', 'guess_the_number', 'hackerman', 'makeexclusivechannel', 'slowmode', 'delete_textchannel', 'jishaku load', 'vote_test', 'jishaku shell', 'jishaku', 'jishaku python']:
+      if not ctx.command.qualified_name.startswith('jishaku'):
 
-      if await self.bot.cmd_stats.find(ctx.command.qualified_name) is None:
-        await self.bot.cmd_stats.upsert({"_id": ctx.command.qualified_name, "usage_count": 1})
+        if await self.bot.cmd_stats.find(ctx.command.qualified_name) is None:
+          await self.bot.cmd_stats.upsert({"_id": ctx.command.qualified_name, "usage_count": 1})
 
-      else:
-        await self.bot.cmd_stats.increment(
-          ctx.command.qualified_name, 1, "usage_count"
-        )
-
-    else:
-      return
+        else:
+          await self.bot.cmd_stats.increment(
+            ctx.command.qualified_name, 1, "usage_count"
+          )
 
   @commands.Cog.listener()
   async def on_message(self, ctx):
