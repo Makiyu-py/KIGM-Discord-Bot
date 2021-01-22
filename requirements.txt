@@ -8,6 +8,7 @@ dblpy==0.4.0
 discord-interactive==4.0
 discord-py-slash-command==1.0.8.5
 discord.py==1.6.0
+disputils
 dpymenus==1.3.0
 emoji==0.6.0
 Flask==1.1.2
@@ -26,6 +27,7 @@ requests==2.25.1
 requests-oauthlib==1.3.0
 requests-toolbelt==0.8.0
 sr-api
+termcolor
 typing-extensions==3.7.4.3
 ujson==4.0.1
 urllib3==1.26.2
