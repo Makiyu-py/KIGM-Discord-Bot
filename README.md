@@ -1,3 +1,6 @@
+#### These are the old code stuff I had before I had an actual hosting provider (which is now [DanBot Hosting](https://discord.gg/dbh))
+
+
 # KIGM-Discord-Bot
 This is Makiyu's First Discord Bot! named "Kid In Google Images". 
 
