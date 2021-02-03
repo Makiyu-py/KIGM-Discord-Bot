@@ -19,6 +19,7 @@ import os
 import random
 from typing import Optional
 
+import humor_langs
 import asyncpraw
 import discord
 import requests
@@ -107,12 +108,12 @@ class FunCommands(commands.Cog, name='😄 Fun Commands'):
     @commands.command(description='Converts your text to OwO ^--^', aliases=['0w0'])
     @commands.guild_only()
     async def owo(self, ctx, *, sentence):
-        await ctx.message.reply(the_universe.text_to_owo(sentence), mention_author=True)
+        await ctx.message.reply(humor_langs.owofy(sentence), mention_author=True)
 
     @commands.command(description='Converts your text to BriIsh', aliases=['british'])
     @commands.guild_only()
     async def britishaccent(self, ctx, *, sentence):
-        await ctx.message.reply(the_universe.british_accent(sentence), mention_author=True)
+        await ctx.message.reply(humor_langs.strong_british_accent(sentence), mention_author=True)
 
     @commands.command(description='Converts your text to emoji! 💩', aliases=['texttoemoji', 'emojithis', 'tte'])
     @commands.guild_only()
