@@ -122,9 +122,8 @@ class FunCommands(commands.Cog, name='😄 Fun Commands'):
 
     @commands.command(description="Clap your way with adding the clap :clap: emoji between every letter/word!",
                       aliases=['clapify'])
-    async def clap(self, ctx, mode_of_clap_either_letter_or_word, *, phrase):
-        output = f"{mode_of_clap_either_letter_or_word},{phrase}"
-        await ctx.message.reply(the_universe.clapdacheeks(output), mention_author=True)
+    async def clap(self, ctx, *, phrase):
+        await ctx.message.reply(humor_langs.clap_emojifier(phrase), mention_author=True)
 
     @commands.command(description='V i r t u a l  s l a p p', aliases=['slapp'])
     @commands.guild_only()
