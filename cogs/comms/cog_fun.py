@@ -30,24 +30,44 @@ from discord.ext.commands import BucketType, cooldown
 
 import the_universe
 
-botid = 763626077292724264
-
-secret_id = os.environ.get("REDDIT_ID_SECRET")
-
-reddit_id = os.environ.get("REDDIT_ID")
-
 
 class FunCommands(commands.Cog, name='😄 Fun Commands'):
 
     def __init__(self, bot):
         self.bot = bot
-        self.reddit = None
+        self.reddit = asyncpraw.Reddit(client_id=os.environ.get("REDDIT_ID"),
+                                  client_secret=os.environ.get("REDDIT_ID_SECRET"),
+                                  user_agent="KIGM_DISCORD_BOT by u/-Makiyu-")
 
     @commands.command(description="pls dont spam this command")
     @commands.guild_only()
     @cooldown(1, 2, BucketType.user)
-    async def meme(self, ctx, subreddit: Optional[str] = None):
-        await ctx.send("Aaaaaaaa :((")
+    async def meme(self, ctx):
+        if self.reddit:
+            meme_subs = ("memes", "funny", "dankmemes", "nukedmemes", "ComedyCemetery", "bonehurtingjuice", "starterpacks", "terriblefacebookmemes")
+
+            picked_sub = random.choice(meme_subs)
+            sub_obj = await self.reddit.subreddit(picked_sub)
+            async for submission in sub_obj.top("day"):
+                if not submission.over_18 and not submission.is_self and not submission.stickied and not submission.spoiler:
+                    out_sub = submission
+
+                    memebed = discord.Embed(title=out_sub.title, description="**Subreddit:**  `r/{0}`\n**Author:**  `u/{1}`".format(picked_sub, 
+                                                                                                                                  out_sub.author.name),
+                                            color=self.bot.main_color, url="https://www.reddit.com" + out_sub.permalink)
+                    memebed.set_image(url=out_sub.url)
+
+                    memebed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+                    memebed.set_footer(text="👍 {0}  💬 {1}".format(out_sub.score, out_sub.num_comments))
+                    await ctx.send(embed=memebed)
+                    break
+            else:
+                await ctx.error("No suitable meme found.")
+                    
+        else:
+            await ctx.error("My reddit account nont working wooo!")
+                
+                
         
     @commands.command(description='Convert text to binary00101001')
     @commands.guild_only()
