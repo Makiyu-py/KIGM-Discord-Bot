@@ -69,18 +69,15 @@ class CustomContext(commands.Context):
                               description=f"`{prefix}` {syntax(command, False)}",
                               color=self.bot.main_color)
 
-        '''  I wonder if this works or not...
         if isinstance(command, Group):
-          SCmd = ""
-          for subcommmand in command.walk_commands():
-
-            if subcommmand.root_parent == command:
-          		SCmd += "`{0.name}` - {0.description}\n".format(subcommmand)
-          	else:
-            	continue
+            SCmd = ""
+            for subcommmand in command.walk_commands():
+                if subcommmand.parents[0] == command:
+                    SCmd += "`{0.name}` - {0.description}\n".format(subcommmand)
+                else:
+                    continue
             
-          embed.add_field(name='Subcommands', value=SCmd, inline=False)
-        '''
+            embed.add_field(name='Subcommands', value=SCmd, inline=False)
 
         if len(command.aliases) > 0:
         	embed.add_field(name="Command Aliases", value=", ".join(["**{}**".format(al) for al in command.aliases]), inline=False)
