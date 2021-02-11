@@ -48,21 +48,28 @@ class FunCommands(commands.Cog, name='😄 Fun Commands'):
 
             picked_sub = random.choice(meme_subs)
             sub_obj = await self.reddit.subreddit(picked_sub)
+            
+            av_posts = []
+            limit = 20
             async for submission in sub_obj.top("day"):
-                if not submission.over_18 and not submission.is_self and not submission.stickied and not submission.spoiler:
-                    out_sub = submission
-
-                    memebed = discord.Embed(title=out_sub.title, description="**Subreddit:**  `r/{0}`\n**Author:**  `u/{1}`".format(picked_sub, 
-                                                                                                                                  out_sub.author.name),
-                                            color=self.bot.main_color, url="https://www.reddit.com" + out_sub.permalink)
-                    memebed.set_image(url=out_sub.url)
-
-                    memebed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
-                    memebed.set_footer(text="👍 {0}  💬 {1}".format(out_sub.score, out_sub.num_comments))
-                    await ctx.send(embed=memebed)
+                if len(av_posts) >= limit:  # I'm just scared for when my bot randomly just goes offline again...
                     break
-            else:
-                await ctx.error("No suitable meme found.")
+                if not submission.over_18 and not submission.is_self and not submission.stickied and not submission.spoiler:
+                    av_posts.append(submission)
+
+            if len(av_posts) == 0:
+                await ctx.error("No good juicy memes are found.")
+                return
+            
+            out_sub = random.choice(av_posts)
+            memebed = discord.Embed(title=out_sub.title, description="**Subreddit:**  `r/{0}`\n**Author:**  `u/{1}`".format(picked_sub, 
+                                                                                                                            out_sub.author.name),
+                                    color=self.bot.main_color, url="https://www.reddit.com" + out_sub.permalink)
+            memebed.set_image(url=out_sub.url)
+
+            memebed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+            memebed.set_footer(text="👍 {0}  💬 {1}".format(out_sub.score, out_sub.num_comments))
+            await ctx.send(embed=memebed)
                     
         else:
             await ctx.error("My reddit account nont working wooo!")
