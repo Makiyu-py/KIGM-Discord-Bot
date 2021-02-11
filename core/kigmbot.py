@@ -32,14 +32,14 @@ class KIGM(commands.AutoShardedBot):
         
         self.replied_to = 0
         self.owner_id = 526616688091987968
-        self.version = 'V 1.4.1'
+        self.version = 'V 1.4.2'
         self.launch_time = datetime.utcnow()  # for stats cmd for getting bot's uptime
 
         # YouTube is hurting my English soo
         self.main_color = 0xf8f8ff
         self.main_colour = 0xf8f8ff
 
-        #self.dbhcli = DanBotClient(self, os.environ.get("DBH_API_SECRET"), True)
+        self.dbhcli = DanBotClient(self, os.environ.get("DBH_API_SECRET"), True)
         # mongoDB action
         self.mongo = motor.motor_asyncio.AsyncIOMotorClient(os.environ.get("MONGODB_SECRET"))
 

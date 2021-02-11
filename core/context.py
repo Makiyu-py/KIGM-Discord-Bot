@@ -73,7 +73,7 @@ class CustomContext(commands.Context):
             SCmd = ""
             for subcommmand in command.walk_commands():
                 if subcommmand.parents[0] == command:
-                    SCmd += "`{0.name}` - {0.description}\n".format(subcommmand)
+                    SCmd += "**•  {0.name}**\n".format(subcommmand)
                 else:
                     continue
             

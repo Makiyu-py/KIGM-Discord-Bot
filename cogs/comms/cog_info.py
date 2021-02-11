@@ -61,8 +61,7 @@ class InfoCommands(commands.Cog, name=':information_source: Informative Commands
             page = discord.Embed(title="Command Usage Statistics!", description=message, color=self.bot.main_color)
             pages.append(page)
 
-        breact = dpyPaginate(PageList=pages, timeout=45)
-        await breact.menustart(ctx)
+        await ctx.paginate(pages, timeout=45)
 
     @commands.command(aliases=['stat', 'botinfo'], description="Shows my statistics!")
     async def stats(self, ctx):
@@ -75,7 +74,7 @@ class InfoCommands(commands.Cog, name=':information_source: Informative Commands
         embed.add_field(name="👥 Ignorant Friends", value=memberCount)
         embed.add_field(name='<:discord_bot_dev:796709181397925909> Developer', value='<@526616688091987968>')
         embed.add_field(name=":alarm_clock: My Uptime", value=f"{ctx.uptime()}")
-        embed.add_field(name=':computer: Bot Version', value='V 1.4.1')
+        embed.add_field(name=':computer: Bot Version', value=self.bot.version)
         embed.add_field(name="📩 Bot Invite",
                         value="[Invite meee](https://discord.com/api/oauth2/authorize?client_id=763626077292724264&permissions=273115158&scope=bot%20applications.commands)",
                         inline=True)
