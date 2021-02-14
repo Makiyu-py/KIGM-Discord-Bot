@@ -19,6 +19,8 @@ from datetime import datetime
 from termcolor import colored
 from danbot_api import DanBotClient
 import motor.motor_asyncio
+import asyncpraw
+import random
 import os
 
 from utils.mongo import DBShortCuts
@@ -40,6 +42,14 @@ class KIGM(commands.AutoShardedBot):
         self.main_colour = 0xf8f8ff
 
         self.dbhcli = DanBotClient(self, os.environ.get("DBH_API_SECRET"), True)
+        
+        
+        self.reddit = asyncpraw.Reddit(client_id=os.environ.get("REDDIT_ID"),
+                                  client_secret=os.environ.get("REDDIT_ID_SECRET"),
+                                  user_agent="KIGM_DISCORD_BOT by u/-Makiyu-")
+        self.meme_subs = ("memes", "funny", "dankmemes", "ComedyCemetery", "starterpacks", "terriblefacebookmemes")
+        self.av_memes = []
+        
         # mongoDB action
         self.mongo = motor.motor_asyncio.AsyncIOMotorClient(os.environ.get("MONGODB_SECRET"))
 
@@ -61,6 +71,19 @@ class KIGM(commands.AutoShardedBot):
         self.ecod = DBShortCuts(self.udb, "Economy")
         
 	
+    async def renew_memes(self):
+        if len(self.av_memes) <= 5 and self.reddit:
+            _meme_subs = random.shuffle(self.meme_subs)
+            for i in range(2):
+                sub_obj = await self.reddit.subreddit(_meme_subs[i])
+                async for submission in sub_obj.top("day"):
+                    if len(self.av_memes) >= 60:
+                        return
+                    if not submission in self.av_memes and not submission.over_18 and not submission.is_self \
+                    and not submission.stickied and not submission.spoiler and submission.score > 100:
+                        self.av_memes.append(submission)
+    
+
     def load_cogs(self):
         
         # Loads cogs from the cogs/comms directory

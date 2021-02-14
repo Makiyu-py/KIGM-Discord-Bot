@@ -71,6 +71,7 @@ async def on_ready():
     print(colored("\n-------------------------------------", 'blue'))
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching,
                                                            name=f"&help / @{client.user.name}"))
+    await client.renew_memes()
 
 
 @client.event

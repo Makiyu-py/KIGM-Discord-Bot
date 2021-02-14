@@ -43,39 +43,22 @@ class FunCommands(commands.Cog, name='😄 Fun Commands'):
     @commands.guild_only()
     @cooldown(1, 2, BucketType.user)
     async def meme(self, ctx):
-        if self.reddit:
-            meme_subs = ("memes", "funny", "dankmemes", "nukedmemes", "ComedyCemetery", "bonehurtingjuice", "starterpacks", "terriblefacebookmemes")
+        if len(self.bot.av_memes) > 0:
+            _meme = random.choice(self.bot.av_memes)
+            self.bot.av_memes.pop(_meme)
+            memebed = discord.Embed(title=_meme.title, description=f"**Subreddit:**  `r/{_meme.subreddit.name}`\n**Author:**  `u/{_meme.author.name}`",
+                                   url = "https://www.reddit.com{}".format(_meme.permalink))
 
-            picked_sub = random.choice(meme_subs)
-            sub_obj = await self.reddit.subreddit(picked_sub)
-            
-            av_posts = []
-            limit = 20
-            async for submission in sub_obj.top("day"):
-                if len(av_posts) >= limit:  # I'm just scared for when my bot randomly just goes offline again...
-                    break
-                if not submission.over_18 and not submission.is_self and not submission.stickied and not submission.spoiler:
-                    av_posts.append(submission)
+            memebed.set_author(name=ctx.author, avatar_url=ctx.author.avatar_url)
+            memebed.set_image(url=_meme.url)
+            memebed.set_footer(text=f"👍 {_meme.score}  💬 {_meme.num_comments}")
 
-            if len(av_posts) == 0:
-                await ctx.error("No good juicy memes are found.")
-                return
-            
-            out_sub = random.choice(av_posts)
-            memebed = discord.Embed(title=out_sub.title, description="**Subreddit:**  `r/{0}`\n**Author:**  `u/{1}`".format(picked_sub, 
-                                                                                                                            out_sub.author.name),
-                                    color=self.bot.main_color, url="https://www.reddit.com" + out_sub.permalink)
-            memebed.set_image(url=out_sub.url)
-
-            memebed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
-            memebed.set_footer(text="👍 {0}  💬 {1}".format(out_sub.score, out_sub.num_comments))
             await ctx.send(embed=memebed)
-                    
         else:
-            await ctx.error("My reddit account nont working wooo!")
+            await ctx.error("No juicy memes found.")
+        await self.bot.renew_memes()
                 
                 
-        
     @commands.command(description='Convert text to binary00101001')
     @commands.guild_only()
     async def binary(self, ctx, *, text):
