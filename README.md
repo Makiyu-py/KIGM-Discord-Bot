@@ -1,8 +1,9 @@
 <h1 align="center">KIGM Discord Bot</h1>
 <p align="center">
+  <a href="https://top.gg/bot/763626077292724264"><img src="https://top.gg/api/widget/status/763626077292724264.svg?noavatar=true"/></a>
   <a href="https://www.codacy.com/gh/Makiyu-py/KIGM-Discord-Bot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Makiyu-py/KIGM-Discord-Bot&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/30c44e8b6ec146289b07c057eb17a6e2"/></a>
 </p>
-This is Makiyu's First Discord Bot! named "Kid In Google Images". 
+The most fun you'll ever have with a Discord Bot! named "Kid In Google Images". 
 
 KIGM is an incredibly __fun__ bot with **butt-load of commands**! 
 It could also be your favorate moderation bot!
