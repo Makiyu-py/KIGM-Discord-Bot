@@ -109,7 +109,7 @@ class DBShortCuts:
             
         await self.db.insert_one(dict)
 
-    async def upsert(self, dict):
+    async def upsert(self, dict, **kwargs):
         """
         Makes a new item in the document, if it already exists
         it will update that item instead
@@ -181,7 +181,7 @@ class DBShortCuts:
         dict.pop("_id")
         await self.db.update_one({"_id": id}, {"$unset": dict})
 	
-    async def conjoin(self, id, item, field, **kwargs):
+    async def conjoin(self, id, item, field, amount, **kwargs):
         """
         appends the given item/s to `field`
         Params:
