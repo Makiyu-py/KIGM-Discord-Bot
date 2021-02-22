@@ -45,11 +45,13 @@ class FunCommands(commands.Cog, name='😄 Fun Commands'):
     async def meme(self, ctx):
         if len(self.bot.av_memes) > 0:
             _meme = random.choice(self.bot.av_memes)
-            self.bot.av_memes.pop(_meme)
-            memebed = discord.Embed(title=_meme.title, description=f"**Subreddit:**  `r/{_meme.subreddit.name}`\n**Author:**  `u/{_meme.author.name}`",
-                                   url = "https://www.reddit.com{}".format(_meme.permalink))
+            self.bot.av_memes.remove(_meme)
+            sub_origin = _meme.subreddit
+            await sub_origin.load()
+            memebed = discord.Embed(title=_meme.title, description=f"**Subreddit:**  `r/{sub_origin.display_name}`\n**Author:**  `u/{_meme.author.name}`",
+                                   color=self.bot.main_color, url="https://www.reddit.com{}".format(_meme.permalink))
 
-            memebed.set_author(name=ctx.author, avatar_url=ctx.author.avatar_url)
+            memebed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
             memebed.set_image(url=_meme.url)
             memebed.set_footer(text=f"👍 {_meme.score}  💬 {_meme.num_comments}")
 

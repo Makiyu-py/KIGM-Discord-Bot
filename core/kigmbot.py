@@ -44,10 +44,9 @@ class KIGM(commands.AutoShardedBot):
         self.dbhcli = DanBotClient(self, os.environ.get("DBH_API_SECRET"), True)
         
         
-        self.reddit = asyncpraw.Reddit(client_id=os.environ.get("REDDIT_ID"),
-                                  client_secret=os.environ.get("REDDIT_ID_SECRET"),
-                                  user_agent="KIGM_DISCORD_BOT by u/-Makiyu-")
-        self.meme_subs = ("memes", "funny", "dankmemes", "ComedyCemetery", "starterpacks", "terriblefacebookmemes")
+        self.reddit = asyncpraw.Reddit(client_id=os.environ.get("REDDIT_ID"), client_secret=os.environ.get("REDDIT_ID_SECRET"),
+                                       user_agent="KIGM_DISCORD_BOT by u/-Makiyu-")
+        self.meme_subs = ("memes", "funny", "dankmemes", "goodanimemes", "ComedyCemetery", "comedyheaven", "starterpacks", "terriblefacebookmemes")
         self.av_memes = []
         
         # mongoDB action
@@ -73,15 +72,19 @@ class KIGM(commands.AutoShardedBot):
 	
     async def renew_memes(self):
         if len(self.av_memes) <= 5 and self.reddit:
-            _meme_subs = random.shuffle(self.meme_subs)
-            for i in range(2):
+            _meme_subs = random.sample(self.meme_subs, len(self.meme_subs))
+            for i in range(3):
                 sub_obj = await self.reddit.subreddit(_meme_subs[i])
-                async for submission in sub_obj.top("day"):
+                meme_counter = 0  # to balance out the meme distribution
+                async for submission in sub_obj.top(random.choice(["day", "week"])):
                     if len(self.av_memes) >= 60:
                         return
+                    if meme_counter >= 20:
+                        break
                     if not submission in self.av_memes and not submission.over_18 and not submission.is_self \
-                    and not submission.stickied and not submission.spoiler and submission.score > 100:
+                    and not submission.stickied and not submission.spoiler and "." in submission.url[-5:] and submission.score > 100:
                         self.av_memes.append(submission)
+                        meme_counter += 1
     
 
     def load_cogs(self):
