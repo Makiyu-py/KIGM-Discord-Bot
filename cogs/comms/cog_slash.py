@@ -1,4 +1,4 @@
-'''
+"""
 Copyright 2021 Makiyu-py
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-'''
+"""
 
 import random
 
@@ -34,22 +34,33 @@ class SlashCommands(commands.Cog):
     def cog_unload(self):
         self.bot.slash.get_cog_commands(self)
 
-    @cog_ext.cog_slash(name='8ball', description="Let's talk about our fortune... through an 8ball!", options=[
-        manage_commands.create_option("question", "Your question for the magic 8ball!", SlashCommandOptionType.STRING,
-                                      True)])
+    @cog_ext.cog_slash(
+        name="8ball",
+        description="Let's talk about our fortune... through an 8ball!",
+        options=[
+            manage_commands.create_option(
+                "question",
+                "Your question for the magic 8ball!",
+                SlashCommandOptionType.STRING,
+                True,
+            )
+        ],
+    )
     async def fortune8ball(self, ctx, question: str):
 
         question = question.lower()
-        starts = ['is', 'will', 'does', 'do', 'did', 'can', 'are', 'am']
+        starts = ["is", "will", "does", "do", "did", "can", "are", "am"]
         Falseness = 0
         for startofquestion in starts:
             if not question.startswith(startofquestion):
                 Falseness += 1
 
         if Falseness == len(starts):
-            await ctx.send(3,
-                           content='Hm, it seems like your question is **not a yes/no-type of question**, pls try again. :)',
-                           hidden=True)
+            await ctx.send(
+                3,
+                content="Hm, it seems like your question is **not a yes/no-type of question**, pls try again. :)",
+                hidden=True,
+            )
             return
 
         answers = [
@@ -59,8 +70,8 @@ class SlashCommands(commands.Cog):
             # that's fair, right?
             "Oh that's a hard one.... probably?",
             "no. just, no",
-            'obviously no lol',
-            'uhhh yea?',
+            "obviously no lol",
+            "uhhh yea?",
             "yes!!",
             "probably not tbh",
             "YEP",
@@ -70,7 +81,7 @@ class SlashCommands(commands.Cog):
             "ez **yes**",
             "maybe? yea, maybe",
             "lol no",
-            f'well that\'s an obvious *{random.choice(["yes", "no"])}* right there'
+            f'well that\'s an obvious *{random.choice(["yes", "no"])}* right there',
         ]
         da_answer = random.choice(answers)
 

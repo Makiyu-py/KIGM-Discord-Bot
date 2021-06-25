@@ -1,4 +1,4 @@
-'''
+"""
 Copyright 2021 Makiyu-py
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-'''
+"""
 
 from os import environ
 import ast
@@ -30,8 +30,16 @@ class DBShortCuts:
          - documentName (str) : The document this instance should be
         """
         self.db = connection[document_name]
+        self._db_name = document_name
         self.iters = int(environ.get("ITERATE_ENCRYPTION_COUNT"))
         self.logger = logging.getLogger(__name__)
+        self.kash = None
+        self.inited_kash = False
+
+    # <-- Attributes -->
+    @property
+    def db_name(self):
+        return self._db_name
 
     # <-- Pointer Methods -->
     async def update(self, dict, **options):
@@ -71,6 +79,10 @@ class DBShortCuts:
         """
         enc_mode = kwargs.get("id_enc", False)
         id = id if not enc_mode else self.encrypt(id)
+
+        if self.inited_kash:
+            if thing_from_kas := self.get_item_from_kash(id):
+                return thing_from_kas
         return await self.db.find_one({"_id": id})
 
     async def delete_by_id(self, id, **kwargs):
@@ -82,9 +94,9 @@ class DBShortCuts:
         """
         if not await self.find_by_id(id):
             return
-		
+
         enc_mode = kwargs.get("id_enc", False)
-        
+
         id = self.encrypt(id) if enc_mode else id
         await self.db.delete_many({"_id": id})
 
@@ -102,12 +114,15 @@ class DBShortCuts:
         # Always use your own _id
         if not dict["_id"]:
             raise KeyError("_id not found in supplied dict.")
-		
+
         enc_mode = kwargs.get("enc_id", False)
         if enc_mode:
             dict["_id"] = self.encrypt(dict["_id"])
-            
+
         await self.db.insert_one(dict)
+
+        if self.inited_kash:
+            self.kash.append(dict)
 
     async def upsert(self, dict, **kwargs):
         """
@@ -120,14 +135,18 @@ class DBShortCuts:
          - dict (Dictionary) : The dict to insert
          -  id_enc (bool) : Iterates the ID to SHA256 a *few* times if wanted to
         """
-        e = kwargs.get("id_enc", False)  # I gave up on naming the vars 'enc_mode' over-and-over again smh
+        e = kwargs.get(
+            "id_enc", False
+        )  # I gave up on naming the vars 'enc_mode' over-and-over again smh
         if e:
-            dict["_id"] = self.encrypt(dict['_id'])
+            dict["_id"] = self.encrypt(dict["_id"])
 
-        if await self.__get_raw(dict["_id"]) != None:
+        if await self.__get_raw(dict["_id"]) is not None:
             await self.update_by_id(dict)
         else:
             await self.db.insert_one(dict)
+            if self.inited_kash:
+                self.kash.append(dict)
 
     async def update_by_id(self, dict, **kwargs):
         """
@@ -180,7 +199,7 @@ class DBShortCuts:
         id = dict["_id"] if not enc_mode else self.encrypt(dict["_id"])
         dict.pop("_id")
         await self.db.update_one({"_id": id}, {"$unset": dict})
-	
+
     async def conjoin(self, id, item, field, amount, **kwargs):
         """
         appends the given item/s to `field`
@@ -192,25 +211,33 @@ class DBShortCuts:
         """
         if not await self.find_by_id(id):
             return
-        
-        not_supported = [set, dict, hex]  # there's so much more but that's the only stuff
-        								  # that I actually use lol
-            
+
+        not_supported = [
+            set,
+            dict,
+            hex,
+        ]  # there's so much more but that's the only stuff
+        # that I actually use lol
+
         if isinstance(item, [ns for ns in not_supported]):
-            raise TypeError(f"Expected the 2nd parameter of `conjoin` as a string/list, not '{type(item).__name__}'")
-            
+            raise TypeError(
+                f"Expected the 2nd parameter of `conjoin` as a string/list, not '{type(item).__name__}'"
+            )
+
         if not isinstance(item, list) and not isinstance(item, tuple):
             item = [item]
-            
+
         elif isinstance(item, tuple):  # MongoDB does not allow tuples. ;(
             item = list(item)
-        
+
         enc_mode = kwargs.get("encrypt_id", False)
         id = self.encrypt(id) if enc_mode else id
         await self.db.update_one({"_id": id}, {"$addToSet": {field: {"$each": amount}}})
+        if self.inited_kash:
+            self.kash[self.kash.index(self.get_item_from_kash(id))][
+                field
+            ] = amount  # that is long lmao
 
-            
-           
     async def increment(self, id, amount, field, **kwargs):
         """
         Increment a given `field` by `amount`
@@ -226,6 +253,8 @@ class DBShortCuts:
         enc_mode = kwargs.get("encrypt_id", False)
         id = self.encrypt(id) if enc_mode else id
         await self.db.update_one({"_id": id}, {"$inc": {field: amount}})
+        if self.inited_kash:
+            self.kash[self.kash.index(self.get_item_from_kash(id))][field] += amount
 
     async def get_all(self):
         """
@@ -244,6 +273,16 @@ class DBShortCuts:
         """
         return await self.db.find_one({"_id": id})
 
+    def get_item_from_kash(self, id_):
+        if not self.inited_kash:
+            return None
+        try:
+            return next(item for item in self.kash if item["_id"] == id_)
+        except StopIteration:
+            return None
+        except KeyError:
+            return None
+
     def encrypt(self, i: str):
         """
         Iterates the given string to a sha256 string [REDACTED] times
@@ -254,9 +293,9 @@ class DBShortCuts:
         i = str(i)
         for _ in range(self.iters):
             i = hashlib.sha256(i.encode()).hexdigest()
-            #i = hashlib.sha256(bytes(i, 'utf-8')).hexdigest()
+            # i = hashlib.sha256(bytes(i, 'utf-8')).hexdigest()
         return i
-    
+
     # <-- Custom methods -->
     async def get_document(self, id, **kwargs):
         """
@@ -280,3 +319,11 @@ class DBShortCuts:
             return the_dict
         except UnboundLocalError:
             return False
+
+    async def init_kash(self):
+        """
+        Initializes the cache.
+        """
+        cache = await self.get_all()
+        self.kash = cache
+        self.inited_kash = True

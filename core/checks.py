@@ -1,4 +1,4 @@
-'''
+"""
 Copyright 2021 Makiyu-py
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-'''
+"""
 
 import os
 
@@ -28,7 +28,8 @@ def support_server_only():
             return True
 
         await ctx.send(
-            "This command is exclusively **for the support server only.**\nSo here's link of the support server then!  **https://discord.gg/jz4WxkB **")
+            "This command is exclusively **for the support server only.**\nSo here's link of the support server then!  **https://discord.gg/jz4WxkB **"
+        )
         return False
 
     return commands.check(predicate)
@@ -37,9 +38,11 @@ def support_server_only():
 def cmd_has_blacklist():
     async def get_bl(ctx):
         cmdbl_data = await ctx.bot.bl.find(ctx.command.name)
-        if 'Blacklisted' in cmdbl_data:
-            if ctx.author.id in cmdbl_data['Blacklisted']:
-                await ctx.error("You are currently *blacklisted* from using this command.")
+        if "Blacklisted" in cmdbl_data:
+            if ctx.author.id in cmdbl_data["Blacklisted"]:
+                await ctx.error(
+                    "You are currently *blacklisted* from using this command."
+                )
                 return False
 
             else:
@@ -59,7 +62,8 @@ def voters_only():
             return True
 
         await ctx.send(
-            "oops! It seems like this command is for **__voters only.__**\nIf you want to use this command just **vote me on top.gg!**\nVote link: **https://top.gg/bot/763626077292724264/vote **")
+            "oops! It seems like this command is for **__voters only.__**\nIf you want to use this command just **vote me on top.gg!**\nVote link: **https://top.gg/bot/763626077292724264/vote **"
+        )
         return False
 
     return commands.check(check_voted)

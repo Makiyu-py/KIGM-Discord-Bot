@@ -1,4 +1,4 @@
-'''
+"""
 Copyright 2021 Makiyu-py
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-'''
+"""
 
 from discord.ext import commands
 
@@ -43,7 +43,7 @@ class Asyncfuncs(commands.Cog):
     async def update_eco(self, user, change=0, mode="Purse"):
 
         mode = [mode]
-        mode.append('Net Worth')
+        mode.append("Net Worth")
 
         for item in mode:
             await self.bot.ecod.increment("BANK ID - " + user.id, change, item)

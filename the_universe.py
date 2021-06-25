@@ -1,4 +1,4 @@
-'''
+"""
 Copyright 2021 Makiyu-py
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,21 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-'''
+"""
 import random
 
 
 def ttoemoji(sentence):
     # Don't ask why it's hard-coded ...
 
-    beei = [' 🇧', ' 🅱️']
-    ow = [' 🇴', ' ⭕', ' 🅾️']
-    ehks = [' ❌', ' ✖️', ' 🇽']
+    beei = [" 🇧", " 🅱️"]
+    ow = [" 🇴", " ⭕", " 🅾️"]
+    ehks = [" ❌", " ✖️", " 🇽"]
 
     sentence = sentence.replace("A", " 🅰️").replace("a", " 🅰️")
-    sentence = sentence.replace("B", random.choice(beei)).replace("b", random.choice(beei))
+    sentence = sentence.replace("B", random.choice(beei)).replace(
+        "b", random.choice(beei)
+    )
     sentence = sentence.replace("C", " 🇨").replace("c", " 🇨")
     sentence = sentence.replace("D", " 🇩").replace("d", " 🇩")
     sentence = sentence.replace("E", " 🇪").replace("e", " 🇪")
@@ -46,7 +48,9 @@ def ttoemoji(sentence):
     sentence = sentence.replace("U", " 🇺").replace("u", " 🇺")
     sentence = sentence.replace("V", " 🇻").replace("v", " 🇻")
     sentence = sentence.replace("W", " 🇼").replace("w", " 🇼")
-    sentence = sentence.replace("X", random.choice(ehks)).replace("x", random.choice(ehks))
+    sentence = sentence.replace("X", random.choice(ehks)).replace(
+        "x", random.choice(ehks)
+    )
     sentence = sentence.replace("Y", " 🇾").replace("y", " 🇾")
     sentence = sentence.replace("Z", " 🇿").replace("z", " 🇿")
 
@@ -62,8 +66,8 @@ def ttoemoji(sentence):
     sentence = sentence.replace("0", " :zero:")
     sentence = sentence.replace("#", " :hash:")
 
-    question_marks = [' ❓', ' ❔']
-    exclamation_marks = [' :exclamation:', ' :grey_exclamation:']
+    question_marks = [" ❓", " ❔"]
+    exclamation_marks = [" :exclamation:", " :grey_exclamation:"]
 
     sentence = sentence.replace("<=>", " ↔️").replace("<==>", " ↔️")
     sentence = sentence.replace("?", random.choice(question_marks))
@@ -76,9 +80,9 @@ def ttoemoji(sentence):
     return sentence
 
 
-def convert_list_to_string(org_list, seperator=' '):
-    """ Convert list to string, by joining all item in list with given separator.
-        Returns the concatenated string """
+def convert_list_to_string(org_list, seperator=" "):
+    """Convert list to string, by joining all item in list with given separator.
+    Returns the concatenated string"""
     return seperator.join(org_list)
 
 
@@ -100,7 +104,11 @@ def convert(time):
 
 
 def syntax(command, show_aliases_on_syntax: bool = True):
-    cmd_and_aliases = "|".join([str(command), *command.aliases]) if show_aliases_on_syntax else str(command)
+    cmd_and_aliases = (
+        "|".join([str(command), *command.aliases])
+        if show_aliases_on_syntax
+        else str(command)
+    )
     params = []
 
     for key, value in command.params.items():
@@ -110,4 +118,4 @@ def syntax(command, show_aliases_on_syntax: bool = True):
 
     params = " ".join(params) if len(params) >= 1 else ""
 
-    return f'`{cmd_and_aliases} {params}`'
+    return f"`{cmd_and_aliases} {params}`"

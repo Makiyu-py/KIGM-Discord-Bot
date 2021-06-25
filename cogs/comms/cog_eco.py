@@ -1,4 +1,4 @@
-'''
+"""
 Copyright 2021 Makiyu-py
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-'''
+"""
 
 from typing import Optional
 
@@ -21,17 +21,16 @@ from discord.ext import commands
 from discord.ext.commands import cooldown
 
 
-class Economy(commands.Cog, name=':euro: Economy System'):
-
+class Economy(commands.Cog, name=":euro: Economy System"):
     def __init__(self, bot):
         self.bot = bot
         self.ecofunc = self.bot.get_cog("Asyncfuncs")
 
     # ------------------------------------Doing Stuff to the Balance--------------------------------------------
 
-    @commands.command(description='Check your balance!', aliases=['bal'])
+    @commands.command(description="Check your balance!", aliases=["bal"])
     async def balance(self, ctx, user: Optional[discord.Member] = None):
-        '''
+        """
         if user == None:
           user = ctx.author
 
@@ -51,12 +50,14 @@ class Economy(commands.Cog, name=':euro: Economy System'):
         embed.add_field(name=":Bank: Bank Bal: ", value=f'{str(bank_amt)} Nitro Shards <a:boost_evolve:769448461824163870>')
 
         await ctx.send(embed=embed)
-        '''
-        await ctx.send("**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!")
+        """
+        await ctx.send(
+            "**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!"
+        )
 
-    @commands.command(aliases=['wdrw'], description='Withdraw your shards to the Bank!')
+    @commands.command(aliases=["wdrw"], description="Withdraw your shards to the Bank!")
     async def withdraw(self, ctx, amount=None):
-        '''
+        """
 
         await self.ecofunc.get_user_data(ctx.author)
 
@@ -88,10 +89,12 @@ class Economy(commands.Cog, name=':euro: Economy System'):
         await self.ecofunc.update_eco(ctx.author, -1*amount, "Bank")
 
         await ctx.send(f"**You have successfully withdrew {amount} Nitro Shards <a:boost_evolve:769448461824163870> from the Official Bank of the KIGM Bot to your purse! :Bank:**")
-        '''
-        await ctx.send("**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!")
+        """
+        await ctx.send(
+            "**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!"
+        )
 
-    @commands.command(aliases=['dep'], description='Deposit your shards to the Bank!')
+    @commands.command(aliases=["dep"], description="Deposit your shards to the Bank!")
     async def deposit(self, ctx, amount=None):
         # await self.ecofunc.open_account(ctx.author)
 
@@ -123,11 +126,13 @@ class Economy(commands.Cog, name=':euro: Economy System'):
         # await self.ecofunc.update_eco(ctx.author, amount, "Bank")
 
         # await ctx.send(f"**You have successfully deposited {amount} Nitro Shards <a:boost_evolve:769448461824163870> to the Official Bank of the KIGM Bot! :bank:**")
-        await ctx.send("**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!")
+        await ctx.send(
+            "**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!"
+        )
 
         # -----------------------------------Earning/Losing Shards--------------------------------------------------
 
-    @commands.command(aliases=['give'], description='Give someone your money!')
+    @commands.command(aliases=["give"], description="Give someone your money!")
     @commands.guild_only()
     async def send_money(self, ctx, member: discord.Member = None, amount=None):
         # await self.ecofunc.open_account(ctx.author)
@@ -164,9 +169,13 @@ class Economy(commands.Cog, name=':euro: Economy System'):
         # await ctx.send(f"**You have successfully gave {amount} Nitro Shards to {member.mention}! <a:boost_evolve:769448461824163870>**")
 
         # await member.send(f"**{ctx.author}** | `ID: {ctx.author.id}` has given you **{amount} Nitro Shards! <a:boost_evolve:769448461824163870>**")
-        await ctx.send("**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!")
+        await ctx.send(
+            "**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!"
+        )
 
-    @commands.command(description=":detective: *theif boi* :detective:", aliases=['steal', 'loot'])
+    @commands.command(
+        description=":detective: *theif boi* :detective:", aliases=["steal", "loot"]
+    )
     @commands.guild_only()
     @cooldown(1, 3600, commands.BucketType.user)
     async def rob(self, ctx, member: discord.Member = None):
@@ -217,9 +226,11 @@ class Economy(commands.Cog, name=':euro: Economy System'):
         #   embed.set_footer(text=f"Thief: {ctx.author} | Poor Victim: {member}", icon_url=ctx.author.avatar_url)
 
         #   await ctx.send(embed=embed)
-        await ctx.send("**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!")
+        await ctx.send(
+            "**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!"
+        )
 
-    @commands.command(description='Get your daily shards!')
+    @commands.command(description="Get your daily shards!")
     @cooldown(1, 86400, commands.BucketType.user)
     async def daily(self, ctx):
         # await self.ecofunc.open_account(ctx.author)
@@ -230,9 +241,15 @@ class Economy(commands.Cog, name=':euro: Economy System'):
         # embed.set_footer(text="You may get your daily again in 24 HOURS!")
 
         # await ctx.send(embed=embed)
-        await ctx.send("**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!")
+        await ctx.send(
+            "**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!"
+        )
 
-    @commands.group(name='gamble', description='Bet/Gamble your shards for more satisfaction!', aliases=['bet'])
+    @commands.group(
+        name="gamble",
+        description="Bet/Gamble your shards for more satisfaction!",
+        aliases=["bet"],
+    )
     @commands.guild_only()
     async def game_eco(self, ctx):
         # if ctx.invoked_subcommand is None:
@@ -245,9 +262,14 @@ class Economy(commands.Cog, name=':euro: Economy System'):
         #   embed.add_field(name="**Roll the Dice!**", value='`gamble dice <bet_size>`')
 
         #   await ctx.send(embed=embed)
-        await ctx.send("**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!")
+        await ctx.send(
+            "**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!"
+        )
 
-    @game_eco.command(description="Gamble yourself 50/50 with a coin!", aliases=['flipcoin', 'flipthecoin'])
+    @game_eco.command(
+        description="Gamble yourself 50/50 with a coin!",
+        aliases=["flipcoin", "flipthecoin"],
+    )
     @commands.guild_only()
     @cooldown(1, 600, commands.BucketType.user)
     async def coinflip(self, ctx, bet: int = None):
@@ -310,11 +332,14 @@ class Economy(commands.Cog, name=':euro: Economy System'):
 
         # except asyncio.TimeoutError:
         #   await ctx.send("*Command cancelled cuz u sloww*")
-        await ctx.send("**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!")
+        await ctx.send(
+            "**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!"
+        )
 
     @game_eco.command(
-        description='Guess the dice! (dev running out of ideas so just use the suggest command when u have a cool one)',
-        aliases=['guessthedice'])
+        description="Guess the dice! (dev running out of ideas so just use the suggest command when u have a cool one)",
+        aliases=["guessthedice"],
+    )
     @commands.guild_only()
     @cooldown(1, 600, commands.BucketType.user)
     async def dice(self, ctx, bet: int = None):
@@ -415,9 +440,13 @@ class Economy(commands.Cog, name=':euro: Economy System'):
         # except asyncio.TimeoutError:
         #   await ctx.send("Bruhh just pick a numberrrr cancelled.")
         #   ctx.command.reset_cooldown(ctx)
-        await ctx.send("**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!")
+        await ctx.send(
+            "**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!"
+        )
 
-    @commands.command(description="Work hard to get that juicy shards! <a:boost_evolve:769448461824163870>")
+    @commands.command(
+        description="Work hard to get that juicy shards! <a:boost_evolve:769448461824163870>"
+    )
     @commands.guild_only()
     @cooldown(1, 1800, commands.BucketType.user)
     async def work(self, ctx):
@@ -440,7 +469,9 @@ class Economy(commands.Cog, name=':euro: Economy System'):
         # embed.set_author(name=f"Hardwork Done by {ctx.author}", icon_url=ctx.author.avatar_url)
 
         # await ctx.send(embed=embed)
-        await ctx.send("**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!")
+        await ctx.send(
+            "**The Devs Are Currently Improving The Economy!**\nSorry for the inconvinience!"
+        )
 
 
 def setup(bot):

@@ -1,4 +1,4 @@
-'''
+"""
 Copyright 2021 Makiyu-py
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-'''
+"""
 
 import asyncio
 from datetime import datetime
@@ -28,46 +28,47 @@ from utils.paginate import dpyPaginate
 
 
 class CustomContext(commands.Context):
-
     def uptime(self, **kwargs):
-        
+
         # Getting the bot's uptime is much 'time-consuming' than I expected... haha...
-        bold_it = kwargs.get('boldm', True)
-        
+        bold_it = kwargs.get("boldm", True)
+
         delta_uptime = datetime.utcnow() - self.bot.launch_time
         hours, remainder = divmod(int(delta_uptime.total_seconds()), 3600)
         minutes, seconds = divmod(remainder, 60)
         days, hours = divmod(hours, 24)
-        uptime_msg = ''
+        uptime_msg = ""
 
         if days > 0:
-            uptime_msg += f'**{days}d**, '
+            uptime_msg += f"**{days}d**, "
 
         if hours > 0:
-            uptime_msg += f'**{hours}h**, '
+            uptime_msg += f"**{hours}h**, "
 
         if minutes > 0:
-            uptime_msg += f'**{minutes}m**, '
+            uptime_msg += f"**{minutes}m**, "
 
-        uptime_msg += '{0}**{1}s**'.format("and " if minutes > 0 else "", seconds)
-        
+        uptime_msg += "{0}**{1}s**".format("and " if minutes > 0 else "", seconds)
+
         if not bold_it:
             uptime_msg = uptime_msg.strip("*")
-            
+
         return uptime_msg
-    
+
     async def error(self, errormsg: str, **kwargs):
-        return await self.reply(f'**ERROR!**\n{errormsg}', **kwargs)
+        return await self.reply(f"**ERROR!**\n{errormsg}", **kwargs)
 
     async def cmd_help(self, command: Union[Command, Group]):
         prefix = await self.bot.config.find(self.guild.id)
         try:
-        	prefix = prefix["Bot Prefix"]
+            prefix = prefix["Bot Prefix"]
         except TypeError:
             prefix = "&"
-        embed = discord.Embed(title=f"{str(command).upper()} Help!", 
-                              description=f"`{prefix}` {syntax(command, False)}",
-                              color=self.bot.main_color)
+        embed = discord.Embed(
+            title=f"{str(command).upper()} Help!",
+            description=f"`{prefix}` {syntax(command, False)}",
+            color=self.bot.main_color,
+        )
 
         if isinstance(command, Group):
             SCmd = ""
@@ -76,19 +77,35 @@ class CustomContext(commands.Context):
                     SCmd += "**•  {0.name}**\n".format(subcommmand)
                 else:
                     continue
-            
-            embed.add_field(name='Subcommands', value=SCmd, inline=False)
+
+            embed.add_field(name="Subcommands", value=SCmd, inline=False)
 
         if len(command.aliases) > 0:
-        	embed.add_field(name="Command Aliases", value=", ".join(["**{}**".format(al) for al in command.aliases]), inline=False)
-            
-        embed.add_field(name=f'Command Description:', value=command.description or "no description ¯\_(ツ)_/¯", inline=False)
+            embed.add_field(
+                name="Command Aliases",
+                value=", ".join(["**{}**".format(al) for al in command.aliases]),
+                inline=False,
+            )
 
-        embed.set_footer(text=f'{prefix} - Server Prefix | <> - Required | [] - Optional')
+        embed.add_field(
+            name=f"Command Description:",
+            value=command.description or "no description ¯\_(ツ)_/¯",
+            inline=False,
+        )
+
+        embed.set_footer(
+            text=f"{prefix} - Server Prefix | <> - Required | [] - Optional"
+        )
         return await self.send(embed=embed)
-        
-    async def confirmation(self, msg: str, em_color: hex = 0xf8f8ff, 
-                           confirmed_msg=False, failed_msg=False, channel_sent: discord.TextChannel = None):
+
+    async def confirmation(
+        self,
+        msg: str,
+        em_color: hex = 0xF8F8FF,
+        confirmed_msg=False,
+        failed_msg=False,
+        channel_sent: discord.TextChannel = None,
+    ):
 
         _confirm = BotConfirmation(self, em_color)
         await _confirm.confirm(text=msg, channel=channel_sent)
@@ -108,25 +125,42 @@ class CustomContext(commands.Context):
 
     async def paginate(self, em_list: list, **kwargs):
 
-        allowms = kwargs.get('multi_session', False)
-        timeout = kwargs.get('timeout', 20)
-        c_button = kwargs.get('cancel_button', True)
-        c_page = kwargs.get('cancel_page', None)
-        dest = kwargs.get('destination', None)
-        
-        pag = dpyPaginate(PageList=em_list, multi_session=allowms, timeout=timeout,
-                    cancel_button=c_button, cancel_page=c_page, destination=dest)
-        
+        allowms = kwargs.get("multi_session", False)
+        timeout = kwargs.get("timeout", 20)
+        c_button = kwargs.get("cancel_button", True)
+        c_page = kwargs.get("cancel_page", None)
+        dest = kwargs.get("destination", None)
+
+        pag = dpyPaginate(
+            PageList=em_list,
+            multi_session=allowms,
+            timeout=timeout,
+            cancel_button=c_button,
+            cancel_page=c_page,
+            destination=dest,
+        )
+
         return await pag.menustart(self)
-        
-    async def input(self, dr: bool = False, check: Callable = False, tm_msg: str = None, delete_after: float = 5.0,
-                    timeout: float = 20.0):
+
+    async def input(
+        self,
+        dr: bool = False,
+        check: Callable = False,
+        tm_msg: str = None,
+        delete_after: float = 5.0,
+        timeout: float = 20.0,
+    ):
 
         if not check:
-            check = lambda m: (m.author == self.author and m.channel == self.channel) and not m.author.bot
+            check = (
+                lambda m: (m.author == self.author and m.channel == self.channel)
+                and not m.author.bot
+            )
 
         try:
-            inp: discord.Message = await self.bot.wait_for('message', check=check, timeout=timeout)
+            inp: discord.Message = await self.bot.wait_for(
+                "message", check=check, timeout=timeout
+            )
 
             if dr:
                 await inp.delete()
@@ -134,7 +168,9 @@ class CustomContext(commands.Context):
             return inp.content
 
         except asyncio.TimeoutError:
-            await self.send(tm_msg or "Oops! It seems like you took too long! Try again later.",
-                            delete_after=delete_after)
+            await self.send(
+                tm_msg or "Oops! It seems like you took too long! Try again later.",
+                delete_after=delete_after,
+            )
 
             return False
