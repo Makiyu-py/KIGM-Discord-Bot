@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import asyncio
 import os
 import sys
 import time
-import asyncio
 
 # Standard Packages
 from datetime import datetime
@@ -25,10 +25,10 @@ from datetime import datetime
 # Main API / Wrapper
 import discord
 from discord.ext import commands
+from dotenv import load_dotenv
 
 # 3rd Party Libraries Used
 from termcolor import colored  # colors oo
-from dotenv import load_dotenv
 
 # Local Packages
 from core import KIGM

@@ -1,6 +1,7 @@
 from motor.motor_asyncio import AsyncIOMotorClient
-from umongo.frameworks import MotorAsyncIOInstance
 from umongo import Document, fields
+from umongo.frameworks import MotorAsyncIOInstance
+
 
 class Guild(Document):
     gid = fields.IntField(required=True, attribute="_id")
@@ -9,6 +10,7 @@ class Guild(Document):
 
     class Meta:
         collection_name = "G_Config"
+
 
 class Economy(Document):
     user_id = fields.IntField(required=True, attribute="_id")

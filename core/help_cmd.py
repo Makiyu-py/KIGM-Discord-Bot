@@ -1,6 +1,7 @@
+from typing import List, Optional
+
 import discord
 from discord.ext import commands
-from typing import List, Optional
 
 from the_universe import syntax
 
@@ -59,9 +60,7 @@ class KIGMHelp(commands.HelpCommand):
             if cog.qualified_name in self.SB_COGS:
                 continue
 
-            helpEmbed = await generate_cog_help_embed(
-                ctx, cog=cog, cmds=_commands
-            )
+            helpEmbed = await generate_cog_help_embed(ctx, cog=cog, cmds=_commands)
             helpEmbed.set_footer(
                 text=f"Created by Makiyu#4707 | Page {len(HelpList) + 1} of {len(set(mapping.items()))}",
                 icon_url="https://cdn.discordapp.com/avatars/526616688091987968/fc88ac5bd50ddabe601fb655e2ba72e0.webp?size=32",

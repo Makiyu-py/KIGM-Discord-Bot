@@ -19,9 +19,9 @@ import os
 import random
 from typing import Optional
 
-import humor_langs
 import asyncpraw
 import discord
+import humor_langs
 import requests
 
 # from PIL import Image

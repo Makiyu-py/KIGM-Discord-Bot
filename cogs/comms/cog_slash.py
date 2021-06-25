@@ -17,9 +17,7 @@ limitations under the License.
 import random
 
 from discord.ext import commands
-from discord_slash import SlashCommand
-from discord_slash import SlashCommandOptionType
-from discord_slash import cog_ext
+from discord_slash import SlashCommand, SlashCommandOptionType, cog_ext
 from discord_slash.utils import manage_commands
 
 

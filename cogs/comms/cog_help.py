@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Optional
 from difflib import get_close_matches
+from typing import Optional
 
 import discord
 from discord.ext import commands
 from discord.ext.commands import BucketType, cooldown
 from discord.utils import get
 
-from the_universe import syntax
 from core import KIGMHelp
+from the_universe import syntax
 
 
 class HelpCommands(commands.Cog, name=":bookmark_tabs: Help"):

@@ -15,17 +15,19 @@ limitations under the License.
 """
 
 import asyncio
-from discord.ext import commands
-from datetime import datetime
-from termcolor import colored
-from danbot_api import DanBotClient
-import motor.motor_asyncio
-import asyncpraw
-import random
 import os
+import random
 from collections import OrderedDict
+from datetime import datetime
+
+import asyncpraw
+import motor.motor_asyncio
+from danbot_api import DanBotClient
+from discord.ext import commands
+from termcolor import colored
 
 from utils.mongo import DBShortCuts
+
 from .context import CustomContext
 from .models import init_models
 

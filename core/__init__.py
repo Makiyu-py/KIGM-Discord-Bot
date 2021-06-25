@@ -15,5 +15,5 @@ limitations under the License.
 """
 
 from . import checks
-from .kigmbot import KIGM
 from .help_cmd import KIGMHelp
+from .kigmbot import KIGM

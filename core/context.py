@@ -20,8 +20,8 @@ from typing import Callable, Union
 
 import discord
 from discord.ext import commands
+from discord.ext.commands import Command, Group
 from disputils import BotConfirmation
-from discord.ext.commands import Group, Command
 
 from the_universe import syntax
 from utils.paginate import dpyPaginate
