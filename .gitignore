@@ -130,5 +130,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# not-so-useful stuff
 *.DS_Store
 databases/
+cogs/other/cog_tests.py
+cogs/other/topgg.py
