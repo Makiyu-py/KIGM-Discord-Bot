@@ -125,19 +125,9 @@ class CustomContext(commands.Context):
 
     async def paginate(self, em_list: list, **kwargs):
 
-        allowms = kwargs.get("multi_session", False)
-        timeout = kwargs.get("timeout", 20)
-        c_button = kwargs.get("cancel_button", True)
-        c_page = kwargs.get("cancel_page", None)
-        dest = kwargs.get("destination", None)
-
         pag = dpyPaginate(
             PageList=em_list,
-            multi_session=allowms,
-            timeout=timeout,
-            cancel_button=c_button,
-            cancel_page=c_page,
-            destination=dest,
+            **kwargs
         )
 
         return await pag.menustart(self)
