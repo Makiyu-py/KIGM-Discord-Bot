@@ -24,7 +24,6 @@ class dpyPaginate:
         except KeyError:
             raise KeyError("Expected PageList.")
 
-        self.allowms = kwags.get("multi_session", True)
         self.timeout = kwags.get("timeout", 20)
         self.c_button = kwags.get("cancel_button", True)
         self.c_page = kwags.get("cancel_page", None)
@@ -33,11 +32,12 @@ class dpyPaginate:
     async def menustart(self, ctx):
 
         # Checking if list is actually a list or if the length of the of it is only 1
-        if type(self.pl) != list or len(self.pl) == 1:
-            # if it passes, just send it :P
-            await ctx.send(self.pl) if type(self.pl) != list else await ctx.send(
-                self.pl[0]
-            )
+        if not isinstance(self.pl, list):
+            await ctx.send(self.pl)
+            return
+
+        if len(self.pl) == 1:
+            await ctx.send(self.pl[0])
             return
 
         menu = PaginatedMenu(ctx)
@@ -52,6 +52,4 @@ class dpyPaginate:
             menu.hide_cancel_button()
         if self.destination:
             menu.set_destination(self.destination)
-        if self.allowms:
-            menu.allow_multisession()
         await menu.open()
