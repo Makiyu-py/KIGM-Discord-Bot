@@ -61,11 +61,12 @@ class ServerManager(commands.Cog, name=":desktop: Server Managing"):
     ):
         overwrites = {
             ctx.guild.default_role: discord.PermissionOverwrite(
-                read_messages=False if ctx.guild.default_role != role else True
+                read_messages=ctx.guild.default_role == role
             ),
             ctx.guild.me: discord.PermissionOverwrite(read_messages=True),
             role: discord.PermissionOverwrite(read_messages=True),
         }
+
         if Category_Name is None:
             Category_Name = None
 
@@ -130,7 +131,7 @@ class ServerManager(commands.Cog, name=":desktop: Server Managing"):
                 and message.channel == ctx.channel,
             )
 
-            if msg.content.lower() == "y" or msg.content.lower() == "yes":
+            if msg.content.lower() in ["y", "yes"]:
                 await msg.delete()
                 editthis = await ctx.send(
                     f"cool. Deleting {channel.mention}.", delete_after=10.0
@@ -154,7 +155,7 @@ class ServerManager(commands.Cog, name=":desktop: Server Managing"):
                 )
                 await suremsg.delete()
 
-            elif msg.content.lower() == "n" or msg.content.lower() == "no":
+            elif msg.content.lower() in ["n", "no"]:
                 await msg.delete()
                 await suremsg.delete()
                 await ctx.send(

@@ -197,7 +197,7 @@ class Giveaway(commands.Cog, name=":tada: Giveaway Commands"):
         users.pop(users.index(self.bot.user))
 
         winners = []
-        for i in range(int(data["how many winners"])):
+        for _ in range(int(data["how many winners"])):
             winner = random.choice(users)
             users.pop(users.index(winner))
             winners.append(winner.mention)

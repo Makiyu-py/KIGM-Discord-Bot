@@ -40,14 +40,13 @@ def cmd_has_blacklist():
     async def get_bl(ctx):
         cmdbl_data = await ctx.bot.bl.find(ctx.command.name)
         if "Blacklisted" in cmdbl_data:
-            if ctx.author.id in cmdbl_data["Blacklisted"]:
-                await ctx.error(
-                    "You are currently *blacklisted* from using this command."
-                )
-                return False
-
-            else:
+            if ctx.author.id not in cmdbl_data["Blacklisted"]:
                 return True
+
+            await ctx.error(
+                "You are currently *blacklisted* from using this command."
+            )
+            return False
 
     return commands.check(get_bl)
 

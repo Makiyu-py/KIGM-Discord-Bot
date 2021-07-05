@@ -118,6 +118,6 @@ def syntax(command, show_aliases_on_syntax: bool = True):
             key = key.replace("_", " ")
             params.append(f"[{key}]" if "NoneType" in str(value) else f"<{key}>")
 
-    params = " ".join(params) if len(params) >= 1 else ""
+    params = " ".join(params) if params else ""
 
     return f"`{cmd_and_aliases} {params}`"

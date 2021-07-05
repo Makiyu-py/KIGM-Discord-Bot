@@ -72,21 +72,21 @@ class CustomContext(commands.Context):
         )
 
         if isinstance(command, Group):
-            SCmd = ""
-            for subcommmand in command.walk_commands():
-                if subcommmand.parents[0] == command:
-                    SCmd += "**•  {0.name}**\n".format(subcommmand)
-                else:
-                    continue
+            SCmd = "".join(
+                "**•  {0.name}**\n".format(subcommmand)
+                for subcommmand in command.walk_commands()
+                if subcommmand.parents[0] == command
+            )
 
             embed.add_field(name="Subcommands", value=SCmd, inline=False)
 
         if len(command.aliases) > 0:
             embed.add_field(
                 name="Command Aliases",
-                value=", ".join(["**{}**".format(al) for al in command.aliases]),
+                value=", ".join("**{}**".format(al) for al in command.aliases),
                 inline=False,
             )
+
 
         embed.add_field(
             name=f"Command Description:",

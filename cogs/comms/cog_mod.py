@@ -97,7 +97,7 @@ class ModCommands(commands.Cog, name=":hammer_pick: Moderator Commands"):
                 "You may have not set your muted role!\nYou may by using the `setmuted <muted_role>` command."
             )
         else:
-            if not role in user.roles:
+            if role not in user.roles:
                 return await ctx.error(f"{user} is **already unmuted!**")
 
             try:
