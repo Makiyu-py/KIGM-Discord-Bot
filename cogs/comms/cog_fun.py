@@ -165,7 +165,7 @@ class FunCommands(commands.Cog, name="😄 Fun Commands"):
     )
     @commands.guild_only()
     async def text_to_emoji(self, ctx, *, sentence):
-        await ctx.message.reply(the_universe.ttoemoji(sentence), mention_author=True)
+        await ctx.message.reply(humor_langs.text_to_emoji(sentence), mention_author=True)
 
     @commands.command(
         description="Clap your way with adding the clap :clap: emoji between every letter/word!",

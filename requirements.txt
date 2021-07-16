@@ -13,7 +13,7 @@ disputils
 dnspython
 dpymenus==2.1.5
 humanize>=3.7.0
-humor-langs
+humor-langs==1.0.0
 jishaku==2.0.0
 loremipsum==1.0.5
 Markdown==3.3.3
