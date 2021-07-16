@@ -43,17 +43,14 @@ async def get_prefix(bot, message):
     if not message.guild:
         return commands.when_mentioned_or("&")(bot, message)
 
-    try:
-        data = await bot.config.find(message.guild.id)
+    data = await bot.config.find(message.guild.id)
 
-        # Make sure we have a useable prefix
-        if not data or "Bot Prefix" not in data:
-            return commands.when_mentioned_or("&")(bot, message)
-
-        return commands.when_mentioned_or(data["Bot Prefix"])(bot, message)
-
-    except:
+    # Make sure we have a useable prefix
+    if not data or "Bot Prefix" not in data:
+        await bot.config.upsert({"_id": message.guild.id, "Bot Prefix": "&"})
         return commands.when_mentioned_or("&")(bot, message)
+
+    return commands.when_mentioned_or(data["Bot Prefix"])(bot, message)
 
 
 client = KIGM(
