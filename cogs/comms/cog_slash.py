@@ -49,10 +49,9 @@ class SlashCommands(commands.Cog):
 
         question = question.lower()
         starts = ["is", "will", "does", "do", "did", "can", "are", "am"]
-        Falseness = 0
-        for startofquestion in starts:
-            if not question.startswith(startofquestion):
-                Falseness += 1
+        Falseness = sum(
+            not question.startswith(startofquestion) for startofquestion in starts
+        )
 
         if Falseness == len(starts):
             await ctx.send(

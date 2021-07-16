@@ -26,10 +26,10 @@ from the_universe import syntax
 async def generate_cog_help_embed(
     ctx, *, cog: Optional[commands.Cog], cmds: List[commands.Command]
 ) -> discord.Embed:
-    commandList = ""
+    commandList = "".join(
+        f"\n`{command.name}` - *{command.description}*\n" for command in cmds
+    )
 
-    for command in cmds:
-        commandList += f"\n`{command.name}` - *{command.description}*\n"
 
     prefix = "&"
     if ctx.guild:

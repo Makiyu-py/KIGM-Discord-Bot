@@ -39,9 +39,8 @@ class Events(commands.Cog):
 
         # This prevents any cogs with an overwritten cog_command_error being handled here.
         cog = ctx.cog
-        if cog:
-            if cog._get_overridden_method(cog.cog_command_error) is not None:
-                return
+        if cog and cog._get_overridden_method(cog.cog_command_error) is not None:
+            return
 
         ignored = (commands.CommandNotFound, commands.NotOwner, commands.CheckFailure)
 
@@ -136,80 +135,80 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_completion(self, ctx):
-        if not ctx.command.qualified_name in [
-            "blacklist",
-            "listcogs",
-            "createtag",
-            "alltags",
-            "tag",
-            "guess_the_number",
-            "hackerman",
-            "makeexclusivechannel",
-            "slowmode",
-            "delete_textchannel",
-            "jishaku load",
-            "vote_test",
-            "jishaku shell",
-            "jishaku",
-            "jishaku python",
-        ]:
-            if not ctx.command.qualified_name.startswith("jishaku"):
+        if (
+            ctx.command.qualified_name
+            not in [
+                "blacklist",
+                "listcogs",
+                "createtag",
+                "alltags",
+                "tag",
+                "guess_the_number",
+                "hackerman",
+                "makeexclusivechannel",
+                "slowmode",
+                "delete_textchannel",
+                "jishaku load",
+                "vote_test",
+                "jishaku shell",
+                "jishaku",
+                "jishaku python",
+            ]
+            and not ctx.command.qualified_name.startswith("jishaku")
+        ):
 
-                if await self.bot.cmd_stats.find(ctx.command.qualified_name) is None:
-                    await self.bot.cmd_stats.upsert(
-                        {"_id": ctx.command.qualified_name, "usage_count": 1}
-                    )
+            if await self.bot.cmd_stats.find(ctx.command.qualified_name) is None:
+                await self.bot.cmd_stats.upsert(
+                    {"_id": ctx.command.qualified_name, "usage_count": 1}
+                )
 
-                else:
-                    await self.bot.cmd_stats.increment(
-                        ctx.command.qualified_name, 1, "usage_count"
-                    )
+            else:
+                await self.bot.cmd_stats.increment(
+                    ctx.command.qualified_name, 1, "usage_count"
+                )
 
     @commands.Cog.listener()
     async def on_message(self, ctx):
-        if ctx.guild and not ctx.author.bot:
-            if ctx.content == f"<@!{botid}>" or ctx.content == f"<@{botid}>":
-                serverprefix = await self.bot.config.find(ctx.guild.id)
-                try:
-                    serverprefix = serverprefix["Bot Prefix"]
-                except TypeError:
-                    serverprefix = "&"
-                finally:
-                    await ctx.channel.send(
-                        f"**Thanks for pinging me!** :mailbox_with_mail:\n\n> :man_astronaut: My prefix in this server is `{serverprefix}`\n\n> :face_with_monocle: Use the `{serverprefix}help [command]` to know more about the commands I have! \n\n> :thumbsup: Liking me so far? You can vote me on:\n> \n> :sailboat: **discord.boats** - **https://discord.boats/bot/763626077292724264 **\n> \n> :robot: **top.gg** - **https://top.gg/bot/763626077292724264/vote **"
-                    )
-                return
+        if not ctx.guild or ctx.author.bot:
+            return
+        if ctx.content in [f"<@!{botid}>", f"<@{botid}>"]:
+            serverprefix = await self.bot.config.find(ctx.guild.id)
+            try:
+                serverprefix = serverprefix["Bot Prefix"]
+            except TypeError:
+                serverprefix = "&"
+            finally:
+                await ctx.channel.send(
+                    f"**Thanks for pinging me!** :mailbox_with_mail:\n\n> :man_astronaut: My prefix in this server is `{serverprefix}`\n\n> :face_with_monocle: Use the `{serverprefix}help [command]` to know more about the commands I have! \n\n> :thumbsup: Liking me so far? You can vote me on:\n> \n> :sailboat: **discord.boats** - **https://discord.boats/bot/763626077292724264 **\n> \n> :robot: **top.gg** - **https://top.gg/bot/763626077292724264/vote **"
+                )
+            return
 
-            chance = random.randint(1, 8)
-            g_data = await self.bot.config.find(ctx.guild.id)
+        chance = random.randint(1, 8)
+        g_data = await self.bot.config.find(ctx.guild.id)
 
-            if g_data is not None:
-                if "AutoResponse Mode" in g_data:
-                    autores = g_data["AutoResponse Mode"]
-                else:
-                    autores = False
+        if g_data is not None and "AutoResponse Mode" in g_data:
+            autores = g_data["AutoResponse Mode"]
+        else:
+            autores = False
 
-            else:
-                autores = False
+        if autores and chance == random.randint(1, 8):
 
-            if autores and chance == random.randint(1, 8):
+            # auto-reacts
+            if ctx.content.lower().startswith("sadge "):
+                await ctx.add_reaction("<:Sadge:770201772228083712>")
 
-                # auto-reacts
-                if ctx.content.lower().startswith("sadge "):
-                    await ctx.add_reaction("<:Sadge:770201772228083712>")
+            elif ctx.content.lower().startswith("hm"):
+                await ctx.add_reaction("<:LuigiHmm:760444048523395103>")
 
-                elif ctx.content.lower().startswith("hm"):
-                    await ctx.add_reaction("<:LuigiHmm:760444048523395103>")
+            elif "muah" in ctx.content.lower():
+                await ctx.add_reaction("<:chefkiss:760770186063118356>")
 
-                elif "muah" in ctx.content.lower():
-                    await ctx.add_reaction("<:chefkiss:760770186063118356>")
+            elif ctx.content.upper() == "AYAYA":
+                await ctx.add_reaction("<:AYAYA:767895991218077697>")
 
-                elif ctx.content.upper() == "AYAYA":
-                    await ctx.add_reaction("<:AYAYA:767895991218077697>")
-
-                # auto-sends
-                elif ctx.content.lower().startswith("why"):
-                    await ctx.channel.send("*idk*    ¯\_(ツ)_/¯")
+            # auto-sends
+            elif ctx.content.lower().startswith("why"):
+                await ctx.channel.send("*idk*    ¯\_(ツ)_/¯")
 
 
 def setup(bot):

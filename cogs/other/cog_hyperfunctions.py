@@ -43,9 +43,7 @@ class Asyncfuncs(commands.Cog):
 
     async def update_eco(self, user, change=0, mode="Purse"):
 
-        mode = [mode]
-        mode.append("Net Worth")
-
+        mode = [mode, "Net Worth"]
         for item in mode:
             await self.bot.ecod.increment("BANK ID - " + user.id, change, item)
 

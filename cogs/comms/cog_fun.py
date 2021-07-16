@@ -100,10 +100,6 @@ class FunCommands(commands.Cog, name="😄 Fun Commands"):
             embed.set_footer(
                 icon_url=ctx.author.avatar_url, text=f"Requested by: {ctx.author.name}"
             )
-            embed.set_author(
-                name="All dad jokes from icanhazdadjoke.com so shoutout to them"
-            )
-            await ctx.send(embed=embed)
         else:
             embed = discord.Embed(
                 title="Heard this joke from daddy! :bearded_person:",
@@ -113,10 +109,11 @@ class FunCommands(commands.Cog, name="😄 Fun Commands"):
             embed.set_footer(
                 icon_url=ctx.author.avatar_url, text=f"Requested by {ctx.author.name}"
             )
-            embed.set_author(
-                name="All dad jokes from icanhazdadjoke.com so shoutout to them"
-            )
-            await ctx.send(embed=embed)
+
+        embed.set_author(
+            name="All dad jokes from icanhazdadjoke.com so shoutout to them"
+        )
+        await ctx.send(embed=embed)
 
     @commands.command(description="lol idk manipulate me to saying something")
     @commands.guild_only()

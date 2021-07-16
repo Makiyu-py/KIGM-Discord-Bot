@@ -32,7 +32,7 @@ class Settings(commands.Cog, name=":gear: Settings"):
     @cooldown(1, 120, BucketType.guild)
     @commands.has_permissions(administrator=True)
     async def set_autoresponse(self, ctx, on_or_off: str):
-        if not on_or_off.lower() in ("on", "off", "true", "false"):
+        if on_or_off.lower() not in ("on", "off", "true", "false"):
             await ctx.send(
                 "**ERROR!**\nYou must only input on/off when setting up autoresponse!"
             )
