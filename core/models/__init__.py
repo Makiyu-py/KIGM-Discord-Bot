@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License
 along with KIGM-Discord-Bot.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from motor.motor_asyncio import AsyncIOMotorClient
+from motor.motor_asyncio import AsyncIOMotorDatabase
 from umongo import Document, fields
 from umongo.frameworks import MotorAsyncIOInstance
 
@@ -38,7 +38,7 @@ class Economy(Document):
         collection_name = "Economy"
 
 
-def init_models(db: AsyncIOMotorClient):
+def init_models(db: AsyncIOMotorDatabase):
     global Guild, Economy
     instance = MotorAsyncIOInstance(db)
     Guild = instance.register(Guild)
