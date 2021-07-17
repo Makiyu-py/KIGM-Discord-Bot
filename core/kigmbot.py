@@ -142,4 +142,4 @@ class KIGM(commands.AutoShardedBot):
                 await self.dbhcli.close()
                 await self.reddit.close()
 
-            asyncio.run(close_sessions)
+            asyncio.run(close_sessions())
