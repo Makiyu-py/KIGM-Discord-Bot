@@ -67,12 +67,12 @@ class KIGMHelp(commands.HelpCommand):
         ]
 
     async def cmd_help(self, command: Union[Command, Group]):
-        prefix = await self.bot.config.find(self.guild.id)
+        prefix = await self.context.bot.config.find(self.guild.id)
         prefix = prefix.get("Bot Prefix", "&")
         embed = discord.Embed(
             title=f"{str(command).upper()} Help!",
             description=f"`{prefix}` {syntax(command, False)}",
-            color=self.bot.main_color,
+            color=self.context.bot.main_color,
         )
 
         if isinstance(command, Group):
