@@ -15,10 +15,11 @@ You should have received a copy of the GNU General Public License
 along with KIGM-Discord-Bot.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import discord
 from discord.ext import commands
+from discord.ext.commands import Command, Group
 
 from the_universe import syntax
 
@@ -29,7 +30,6 @@ async def generate_cog_help_embed(
     commandList = "".join(
         f"\n`{command.name}` - *{command.description}*\n" for command in cmds
     )
-
 
     prefix = "&"
     if ctx.guild:
@@ -65,6 +65,42 @@ class KIGMHelp(commands.HelpCommand):
             "TopGG",
             "Jishaku",
         ]
+
+    async def cmd_help(self, command: Union[Command, Group]):
+        prefix = await self.bot.config.find(self.guild.id)
+        prefix = prefix.get("Bot Prefix", "&")
+        embed = discord.Embed(
+            title=f"{str(command).upper()} Help!",
+            description=f"`{prefix}` {syntax(command, False)}",
+            color=self.bot.main_color,
+        )
+
+        if isinstance(command, Group):
+            subcmds_string = "".join(
+                "**•  {0.name}**\n".format(subcommmand)
+                for subcommmand in command.walk_commands()
+                if subcommmand.parents[0] == command
+            )
+
+            embed.add_field(name="Subcommands", value=subcmds_string, inline=False)
+
+        if len(command.aliases) > 0:
+            embed.add_field(
+                name="Command Aliases",
+                value=", ".join("**{}**".format(al) for al in command.aliases),
+                inline=False,
+            )
+
+        embed.add_field(
+            name=f"Command Description:",
+            value=command.description or "no description ¯\_(ツ)_/¯",
+            inline=False,
+        )
+
+        embed.set_footer(
+            text=f"{prefix} - Server Prefix | <> - Required | [] - Optional"
+        )
+        return await self.get_destination().send(embed=embed)
 
     def get_command_signature(self, command):
         return syntax(command)
@@ -110,7 +146,7 @@ class KIGMHelp(commands.HelpCommand):
         if group.cog_name in self.SB_COGS:
             return await ctx.error("Content after help must be a command.")
 
-        await ctx.cmd_help(group)
+        await self.cmd_help(group)
 
     async def send_command_help(self, command):
         ctx = self.context
@@ -118,7 +154,7 @@ class KIGMHelp(commands.HelpCommand):
         if command.cog_name in self.SB_COGS:
             return await ctx.error("Content after help must be a command.")
 
-        await ctx.cmd_help(command)
+        await self.cmd_help(command)
 
     async def send_error_message(self, error):
         dest = self.get_destination()

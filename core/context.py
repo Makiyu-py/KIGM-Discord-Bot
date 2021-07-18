@@ -17,12 +17,11 @@ along with KIGM-Discord-Bot.  If not, see <https://www.gnu.org/licenses/>.
 
 import asyncio
 from datetime import datetime
-from typing import Callable, Union
+from typing import Callable
 
 import discord
 from discord import utils
 from discord.ext import commands
-from discord.ext.commands import Command, Group
 from disputils import BotConfirmation
 
 from the_universe import syntax
@@ -60,46 +59,6 @@ class CustomContext(commands.Context):
     async def error(self, errormsg: str, **kwargs):
         return await self.reply(f"**ERROR!**\n{errormsg}", **kwargs)
 
-    async def cmd_help(self, command: Union[Command, Group]):
-        prefix = await self.bot.config.find(self.guild.id)
-        try:
-            prefix = prefix["Bot Prefix"]
-        except TypeError:
-            prefix = "&"
-        embed = discord.Embed(
-            title=f"{str(command).upper()} Help!",
-            description=f"`{prefix}` {syntax(command, False)}",
-            color=self.bot.main_color,
-        )
-
-        if isinstance(command, Group):
-            SCmd = "".join(
-                "**•  {0.name}**\n".format(subcommmand)
-                for subcommmand in command.walk_commands()
-                if subcommmand.parents[0] == command
-            )
-
-            embed.add_field(name="Subcommands", value=SCmd, inline=False)
-
-        if len(command.aliases) > 0:
-            embed.add_field(
-                name="Command Aliases",
-                value=", ".join("**{}**".format(al) for al in command.aliases),
-                inline=False,
-            )
-
-
-        embed.add_field(
-            name=f"Command Description:",
-            value=command.description or "no description ¯\_(ツ)_/¯",
-            inline=False,
-        )
-
-        embed.set_footer(
-            text=f"{prefix} - Server Prefix | <> - Required | [] - Optional"
-        )
-        return await self.send(embed=embed)
-
     async def confirmation(
         self,
         msg: str,
@@ -127,10 +86,7 @@ class CustomContext(commands.Context):
 
     async def paginate(self, em_list: list, **kwargs):
 
-        pag = dpyPaginate(
-            PageList=em_list,
-            **kwargs
-        )
+        pag = dpyPaginate(PageList=em_list, **kwargs)
 
         return await pag.menustart(self)
 
@@ -141,7 +97,7 @@ class CustomContext(commands.Context):
         tm_msg: str = None,
         delete_after: float = 5.0,
         timeout: float = 20.0,
-        escape_mentions: bool = True
+        escape_mentions: bool = True,
     ):
 
         if not check:
@@ -161,7 +117,11 @@ class CustomContext(commands.Context):
                 except discord.HTTPException:
                     pass
 
-            return inp.content if not escape_mentions else utils.escape_mentions(inp.content)
+            return (
+                inp.content
+                if not escape_mentions
+                else utils.escape_mentions(inp.content)
+            )
 
         except asyncio.TimeoutError:
             await self.send(
