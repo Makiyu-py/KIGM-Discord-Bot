@@ -15,17 +15,24 @@ You should have received a copy of the GNU General Public License
 along with KIGM-Discord-Bot.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-import json
 import random
 from typing import Optional
 
 import discord
-from aiohttp import request
 from discord.ext import commands
 from loremipsum import get_sentences
 from sr_api import Client
 
 import the_universe
+
+
+def convert_av_to_sra_compatible(avatar: str):
+    return (
+        str(avatar)
+        .replace(".webp", ".png")
+        .replace(".gif", ".png")
+        .replace("?size=1024", "?size=512")
+    )
 
 
 class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
@@ -39,7 +46,7 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
     @commands.guild_only()
     async def youtubecomment(self, ctx, *, comment):
         YTAPI = self.sr.youtube_comment(
-            str(ctx.author.avatar_url).replace(".webp", ".png"),
+            convert_av_to_sra_compatible(ctx.author.avatar_url),
             ctx.author.name,
             comment,
         )
@@ -64,7 +71,7 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
             user = ctx.author
 
         Rainbowpfp = self.sr.filter(
-            "gay", str(ctx.author.avatar_url).replace(".webp", ".png")
+            "gay", convert_av_to_sra_compatible(user.avatar_url)
         )
         Rainbowpfp = Rainbowpfp.url
 
@@ -86,11 +93,9 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
     async def jailify(self, ctx, user: Optional[discord.Member] = None):
         if user is None:
             user = ctx.author
-        with open("home/container/databases/Other/APIS.json", "r") as f:
-            API = json.load(f)
 
-        avatar = str(user.avatar_url).replace(".webp", ".png")
-        jail_pfp = self.sr.filter('jail', avatar).url
+        avatar = convert_av_to_sra_compatible(user.avatar_url)
+        jail_pfp = self.sr.filter("jail", avatar).url
 
         embed = discord.Embed(
             title=f":headstone: Rip cuz *{user}* is in *jail*",
@@ -112,11 +117,6 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
     )
     @commands.guild_only()
     async def kanyequote(self, ctx):
-        with open("home/container/databases/Other/APIS.json", "r") as f:
-            API = json.load(f)
-
-        KanyeAPI = API["KanyeQuote"]
-
         kanyeIMGS = [
             "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTU0OTkwNDUxOTQ5MDUzNDQ3/kanye-west-attends-the-christian-dior-show-as-part-of-the-paris-fashion-week-womenswear-fall-winter-2015-2016-on-march-6-2015-in-paris-france-photo-by-dominique-charriau-wireimage-square.jpg",
             "https://storage.googleapis.com/afs-prod/media/1f764b198a42470189b99b4084be6cf0/800.jpeg",
@@ -130,7 +130,9 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
         ]
         pick_img = random.choice(kanyeIMGS)
 
-        async with self.bot.session.get(KanyeAPI, headers={}) as response:
+        async with self.bot.session.get(
+            "https://api.kanye.rest/", headers={}
+        ) as response:
             if response.status == 200:
                 data = await response.json()
 
@@ -158,12 +160,7 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
         if user is None:
             user = ctx.author
 
-        avatar = (
-            str(user.avatar_url)
-            .replace(".webp", ".png")
-            .replace(".gif", ".png")
-            .replace("?size=1024", "?size=512")
-        )
+        avatar = convert_av_to_sra_compatible(user.avatar_url)
 
         wasted_img = self.sr.filter("wasted", avatar).url
 
@@ -206,12 +203,9 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
     @commands.command(description="You read the command name :wink:")
     @commands.guild_only()
     async def useless_fact(self, ctx):
-        with open("home/container/databases/Other/APIS.json", "r") as f:
-            API = json.load(f)
-
-        UFAPI = API["Useless Fact"]
-
-        async with self.bot.session.get(UFAPI, headers={}) as response:
+        async with self.bot.session.get(
+            "https://uselessfacts.jsph.pl/random.json?language=en", headers={}
+        ) as response:
             if response.status == 200:
                 data = await response.json()
                 fact = data["text"]
@@ -232,12 +226,9 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
     )
     @commands.guild_only()
     async def random_opinion(self, ctx):
-        with open("home/container/databases/Other/APIS.json", "r") as f:
-            API = json.load(f)
-
-        OpinionAPI = API["Random Opinion"]
-
-        async with self.bot.session.get(OpinionAPI, headers={}) as response:
+        async with self.bot.session.get(
+            "https://opinionated-quotes-api.gigalixirapp.com/v1/quotes", headers={}
+        ) as response:
             if response.status == 200:
                 data = await response.json()
                 opinion = data["quotes"][0]["quote"]
