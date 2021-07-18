@@ -32,11 +32,6 @@ from discord.ext.commands import BucketType, cooldown
 class FunCommands(commands.Cog, name="😄 Fun Commands"):
     def __init__(self, bot):
         self.bot = bot
-        self.reddit = asyncpraw.Reddit(
-            client_id=os.environ.get("REDDIT_ID"),
-            client_secret=os.environ.get("REDDIT_ID_SECRET"),
-            user_agent="KIGM_DISCORD_BOT by u/-Makiyu-",
-        )
 
     @commands.command(description="pls dont spam this command")
     @commands.guild_only()
