@@ -21,9 +21,10 @@ from umongo.frameworks import MotorAsyncIOInstance
 
 
 class Guild(Document):
-    gid = fields.IntField(required=True, attribute="_id")
+    gid = fields.IntField(required=True, unique=True, attribute="_id")
     prefix = fields.StrField(default="&", attribute="Bot Prefix")
     auto_res = fields.BoolField(attribute="AutoResponse Mode")
+    mute_role = fields.IntField(attribute="MuteRole")
     GARole = fields.IntField()
 
     class Meta:
@@ -31,7 +32,7 @@ class Guild(Document):
 
 
 class Economy(Document):
-    user_id = fields.IntField(required=True, attribute="_id")
+    user_id = fields.IntField(required=True, unique=True, attribute="_id")
     bank = fields.IntField()
     purse = fields.IntField()
 
