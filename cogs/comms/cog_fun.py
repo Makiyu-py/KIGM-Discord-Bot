@@ -18,19 +18,15 @@ along with KIGM-Discord-Bot.  If not, see <https://www.gnu.org/licenses/>.
 import asyncio
 import os
 import random
-from typing import Optional
 
 import asyncpraw
 import discord
 import humor_langs
-import requests
 
 # from PIL import Image
 # from io import BytesIO
 from discord.ext import commands
 from discord.ext.commands import BucketType, cooldown
-
-import the_universe
 
 
 class FunCommands(commands.Cog, name="😄 Fun Commands"):
@@ -86,14 +82,13 @@ class FunCommands(commands.Cog, name="😄 Fun Commands"):
     )
     @commands.guild_only()
     async def dadjoke(self, ctx):
-        joke = requests.get(
-            "https://icanhazdadjoke.com", headers={"Accept": "text/plain"}
-        ).text
+        async with self.bot.session.get("https://icanhazdadjoke.com", headers={"Accept": "text/plain"}) as resp:
+            joke = await resp.text()
 
         if "â" in joke:
             better_joke = joke.replace("â", "'")
             embed = discord.Embed(
-                title="Heard this joke from daddy! :bearded_person:",
+                title="Heard this joke from dad! :bearded_person:",
                 description=better_joke,
                 colour=discord.Colour.blue(),
             )

@@ -31,7 +31,7 @@ import the_universe
 class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
     def __init__(self, bot):
         self.bot = bot
-        self.sr = Client()
+        self.sr = Client(session=self.bot.session)
 
     @commands.command(
         aliases=["ytcomment"], description="Make a *fake* YouTube comment!"
@@ -90,23 +90,21 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
             API = json.load(f)
 
         avatar = str(user.avatar_url).replace(".webp", ".png")
-        Jailpfp = str(API["JailPFP"] + avatar)
+        jail_pfp = self.sr.filter('jail', avatar).url
 
-        async with request("GET", Jailpfp, headers={}) as response:
-            if response.status == 200:
-                embed = discord.Embed(
-                    title=f":headstone: Rip cuz *{user}* is in *jail*",
-                    description=f"[avatar link]({Jailpfp})",
-                    color=self.bot.main_colour,
-                )
-                embed.set_footer(
-                    text=f"{ctx.author} | Powered by https://some-random-api.ml/",
-                    icon_url=ctx.author.avatar_url,
-                )
+        embed = discord.Embed(
+            title=f":headstone: Rip cuz *{user}* is in *jail*",
+            description=f"[avatar link]({jail_pfp})",
+            color=self.bot.main_colour,
+        )
+        embed.set_footer(
+            text=f"{ctx.author} | Powered by https://some-random-api.ml/",
+            icon_url=ctx.author.avatar_url,
+        )
 
-                embed.set_image(url=Jailpfp)
+        embed.set_image(url=jail_pfp)
 
-                await ctx.message.reply(embed=embed)
+        await ctx.message.reply(embed=embed)
 
     @commands.command(
         aliases=["quotekanye"],
@@ -132,7 +130,7 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
         ]
         pick_img = random.choice(kanyeIMGS)
 
-        async with request("GET", KanyeAPI, headers={}) as response:
+        async with self.bot.session.get(KanyeAPI, headers={}) as response:
             if response.status == 200:
                 data = await response.json()
 
@@ -153,7 +151,7 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
                 print(f"response status gave us {response.status} :(")
 
     @commands.command(
-        description="Put a wasted overlay (from GTA V) on someone's (or yours) profile picture!"
+        description="Put a wasted overlay on someone's (or yours') profile picture!"
     )
     @commands.guild_only()
     async def wasted(self, ctx, user: Optional[discord.Member] = None):
@@ -167,12 +165,11 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
             .replace("?size=1024", "?size=512")
         )
 
-        UFAPI = self.sr.filter("wasted", avatar)
-        UFAPI = UFAPI.url
+        wasted_img = self.sr.filter("wasted", avatar).url
 
         embed = discord.Embed(
             title="w a s t e d .",
-            description=f"[T h e  i m a g e  l i n k]({UFAPI})",
+            description=f"[T h e  i m a g e  l i n k]({wasted_img})",
             color=self.bot.main_color,
         )
         embed.set_footer(
@@ -180,7 +177,7 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
             icon_url=ctx.author.avatar_url,
         )
 
-        embed.set_image(url=UFAPI)
+        embed.set_image(url=wasted_img)
 
         await ctx.message.reply(embed=embed)
 
@@ -214,7 +211,7 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
 
         UFAPI = API["Useless Fact"]
 
-        async with request("GET", UFAPI, headers={}) as response:
+        async with self.bot.session.get(UFAPI, headers={}) as response:
             if response.status == 200:
                 data = await response.json()
                 fact = data["text"]
@@ -240,7 +237,7 @@ class RandomCommands(commands.Cog, name=":grey_question: Randomness"):
 
         OpinionAPI = API["Random Opinion"]
 
-        async with request("GET", OpinionAPI, headers={}) as response:
+        async with self.bot.session.get(OpinionAPI, headers={}) as response:
             if response.status == 200:
                 data = await response.json()
                 opinion = data["quotes"][0]["quote"]
