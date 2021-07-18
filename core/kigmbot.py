@@ -15,14 +15,13 @@ You should have received a copy of the GNU General Public License
 along with KIGM-Discord-Bot.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-import asyncio
 import os
 import random
-from collections import OrderedDict
 from datetime import datetime
 
 import asyncpraw
 import motor.motor_asyncio
+from aiohttp import ClientSession
 from danbot_api import DanBotClient
 from discord.ext import commands
 from termcolor import colored
@@ -46,6 +45,7 @@ class KIGM(commands.AutoShardedBot):
         self.main_color = 0xF8F8FF
         self.main_colour = 0xF8F8FF
 
+        self.session = ClientSession()
         self.dbhcli = DanBotClient(
             self, key=os.environ.get("DBH_API_SECRET"), autopost=True
         )
@@ -130,16 +130,9 @@ class KIGM(commands.AutoShardedBot):
 
     async def get_context(self, message, *, cls=CustomContext):
         return await super().get_context(message, cls=cls)
-
-    def run(self, token):
-        try:
-            super().run(token)
-        except:
-            raise
-        finally:
-
-            async def close_sessions():
-                await self.dbhcli.close()
-                await self.reddit.close()
-
-            asyncio.run(close_sessions())
+    
+    async def close(self) -> None:
+        await super().close()
+        await self.dbhcli.close()
+        await self.reddit.close()
+        await self.session.close()
