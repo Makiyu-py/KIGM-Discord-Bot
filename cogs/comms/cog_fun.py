@@ -21,6 +21,7 @@ import random
 
 import asyncpraw
 import discord
+from discord import utils
 import humor_langs
 
 # from PIL import Image
@@ -132,12 +133,12 @@ class FunCommands(commands.Cog, name="😄 Fun Commands"):
 
     @commands.command(description="Converts your text to OwO ^--^", aliases=["0w0"])
     @commands.guild_only()
-    async def owo(self, ctx, *, sentence):
+    async def owo(self, ctx, *, sentence: utils.escape_mentions):
         await ctx.message.reply(humor_langs.owofy(sentence), mention_author=True)
 
     @commands.command(description="Converts your text to BriIsh", aliases=["british"])
     @commands.guild_only()
-    async def britishaccent(self, ctx, *, sentence):
+    async def britishaccent(self, ctx, *, sentence: utils.escape_mentions):
         await ctx.message.reply(
             humor_langs.strong_british_accent(sentence), mention_author=True
         )
@@ -147,14 +148,14 @@ class FunCommands(commands.Cog, name="😄 Fun Commands"):
         aliases=["texttoemoji", "emojithis", "tte"],
     )
     @commands.guild_only()
-    async def text_to_emoji(self, ctx, *, sentence):
+    async def text_to_emoji(self, ctx, *, sentence: utils.escape_mentions):
         await ctx.message.reply(humor_langs.text_to_emoji(sentence), mention_author=True)
 
     @commands.command(
         description="Clap your way with adding the clap :clap: emoji between every letter/word!",
         aliases=["clapify"],
     )
-    async def clap(self, ctx, *, phrase):
+    async def clap(self, ctx, *, phrase: utils.escape_mentions):
         await ctx.message.reply(humor_langs.clap_emojifier(phrase), mention_author=True)
 
     @commands.command(description="V i r t u a l  s l a p p", aliases=["slapp"])
