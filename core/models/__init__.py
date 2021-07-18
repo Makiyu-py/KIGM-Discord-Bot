@@ -23,6 +23,7 @@ from umongo.frameworks import MotorAsyncIOInstance
 class Guild(Document):
     gid = fields.IntField(required=True, attribute="_id")
     prefix = fields.StrField(default="&", attribute="Bot Prefix")
+    auto_res = fields.BoolField(attribute="AutoResponse Mode")
     GARole = fields.IntField()
 
     class Meta:
