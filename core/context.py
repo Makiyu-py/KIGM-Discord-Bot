@@ -20,6 +20,7 @@ from datetime import datetime
 from typing import Callable, Union
 
 import discord
+from discord import utils
 from discord.ext import commands
 from discord.ext.commands import Command, Group
 from disputils import BotConfirmation
@@ -140,6 +141,7 @@ class CustomContext(commands.Context):
         tm_msg: str = None,
         delete_after: float = 5.0,
         timeout: float = 20.0,
+        escape_mentions: bool = True
     ):
 
         if not check:
@@ -154,9 +156,12 @@ class CustomContext(commands.Context):
             )
 
             if dr:
-                await inp.delete()
+                try:
+                    await inp.delete()
+                except discord.HTTPException:
+                    pass
 
-            return inp.content
+            return inp.content if not escape_mentions else utils.escape_mentions(inp.content)
 
         except asyncio.TimeoutError:
             await self.send(

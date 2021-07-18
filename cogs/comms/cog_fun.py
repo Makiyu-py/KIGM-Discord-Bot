@@ -112,30 +112,23 @@ class FunCommands(commands.Cog, name="😄 Fun Commands"):
         await ctx.message.delete()
         embed = discord.Embed(
             title="Go. Tell me what you want me to say",
-            description="||If you don't tell me what I'm going to say in less than 20 seconds, the command won't happen anymore.||",
+            description="||If you don't tell me what I'm going to say in less than 20 seconds, the command won't execute.||",
             color=self.bot.main_color,
         )
         sent = await ctx.send(embed=embed)
 
-        try:
+        resp_content = await ctx.input(dr=True, delete_after=6.0)
 
-            msg = await self.bot.wait_for(
-                "message",
-                timeout=20,
-                check=lambda message: message.author == ctx.author
-                and message.channel == ctx.channel,
-            )
-
-            if msg:
-                await sent.delete()
-                await msg.delete()
-                await ctx.send(msg.content)
-
-        except asyncio.TimeoutError:
-
-            await sent.delete()
-            await ctx.send("Command cancelled cause u slow lol", delete_after=6)
+        if not resp_content:
             ctx.command.reset_cooldown(ctx)
+            return
+
+        try:
+            await sent.delete()
+        except discord.HTTPException:
+            pass
+
+        await ctx.send(resp_content)
 
     @commands.command(description="Converts your text to OwO ^--^", aliases=["0w0"])
     @commands.guild_only()
