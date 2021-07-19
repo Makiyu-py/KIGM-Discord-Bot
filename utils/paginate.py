@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from dpymenus import BaseMenu
 
 from discord.abc import GuildChannel
-from dpymenus import ButtonsError, PagesError, PaginatedMenu, SessionError
+from dpymenus import ButtonsError, PagesError, PaginatedMenu as BasePagination, SessionError
 
 
 async def call_hook(instance: "BaseMenu", hook: str):
@@ -33,14 +33,16 @@ async def call_hook(instance: "BaseMenu", hook: str):
 # auto-removes the user's reaction when the user
 # adds a reaction, so my modification is to check
 # if the bot has proper permissions before removing
-# the reactions (I also formatted the code w black)
+# and clearing the reactions (I also formatted the
+# code with the typical black and isort combo)
 
-class CustomPaginatorMenu(PaginatedMenu):
+class PaginatedMenu(BasePagination):
     def __init__(self, ctx):
         super().__init__(ctx)
 
     async def open(self):
         try:
+            self.show_command_message()
             if len(self.buttons_list) == 0:
                 self.buttons(["⏮️", "◀️", "⏹️", "▶️", "⏭️"])
 
@@ -81,7 +83,10 @@ class CustomPaginatorMenu(PaginatedMenu):
                 await self._handle_transition()
 
             await self._safe_clear_reactions()
-
+	
+    async def _safe_clear_reactions(self):
+        if self.output and isinstance(self.output.channel, GuildChannel) and self.ctx.me.guild_permissions.manage_messages:
+            await self.output.clear_reactions()
 
 class dpyPaginate:
     def __init__(self, **kwargs):
@@ -106,7 +111,7 @@ class dpyPaginate:
             await ctx.send(self.pl[0])
             return
 
-        menu = CustomPaginatorMenu(ctx)
+        menu = PaginatedMenu(ctx)
         menu.add_pages(self.pl)
         if self.timeout:
             menu.set_timeout(self.timeout)
