@@ -15,20 +15,85 @@ You should have received a copy of the GNU General Public License
 along with KIGM-Discord-Bot.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from dpymenus import PaginatedMenu
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from dpymenus import BaseMenu
+
+from discord.abc import GuildChannel
+from dpymenus import ButtonsError, PagesError, PaginatedMenu, SessionError
+
+
+async def call_hook(instance: "BaseMenu", hook: str):
+    if fn := getattr(instance, hook, None):
+        await fn()
+
+
+# I modified the `open` method because dpymenus
+# auto-removes the user's reaction when the user
+# adds a reaction, so my modification is to check
+# if the bot has proper permissions before removing
+# the reactions (I also formatted the code w black)
+
+class CustomPaginatorMenu(PaginatedMenu):
+    def __init__(self, ctx):
+        super().__init__(ctx)
+
+    async def open(self):
+        try:
+            if len(self.buttons_list) == 0:
+                self.buttons(["⏮️", "◀️", "⏹️", "▶️", "⏭️"])
+
+            self._validate_buttons()
+            await super()._open()
+
+        except (ButtonsError, PagesError, SessionError) as exc:
+            print(exc.message)
+
+        else:
+            await self._add_buttons()
+
+            # refresh our message content with the reactions added
+            self.output = await self.destination.fetch_message(self.output.id)
+
+            await call_hook(self, "_hook_after_open")
+
+            while self.active:
+                await call_hook(self, "_hook_before_update")
+                self.input = await self._get_input()
+
+                # this will be true when input handles a timeout event
+                if (
+                    (not self.output)
+                    or (not self.active)
+                    or (self.output and self.persist and not self.active)
+                ):
+                    return
+
+                if (
+                    self.output
+                    and isinstance(self.output.channel, GuildChannel)
+                    and self.ctx.me.guild_permissions.manage_messages
+                ):
+                    await self.output.remove_reaction(self.input, self.ctx.author)
+
+                # this must come after removing reactions to prevent duplicate actions on bot remove
+                await self._handle_transition()
+
+            await self._safe_clear_reactions()
 
 
 class dpyPaginate:
-    def __init__(self, **kwags):
+    def __init__(self, **kwargs):
         try:
-            self.pl = kwags["PageList"]
+            self.pl = kwargs["page_list"]
         except KeyError:
-            raise KeyError("Expected PageList.")
+            raise KeyError("Expected the page_list kwarg.")
 
-        self.timeout = kwags.get("timeout", 20)
-        self.c_button = kwags.get("cancel_button", True)
-        self.c_page = kwags.get("cancel_page", None)
-        self.destination = kwags.get("destination", None)
+        self.timeout = kwargs.get("timeout", 20)
+        self.c_button = kwargs.get("cancel_button", True)
+        self.c_page = kwargs.get("cancel_page", None)
+        self.destination = kwargs.get("destination", None)
 
     async def menustart(self, ctx):
 
@@ -41,7 +106,7 @@ class dpyPaginate:
             await ctx.send(self.pl[0])
             return
 
-        menu = PaginatedMenu(ctx)
+        menu = CustomPaginatorMenu(ctx)
         menu.add_pages(self.pl)
         if self.timeout:
             menu.set_timeout(self.timeout)

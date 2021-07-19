@@ -17,14 +17,14 @@ along with KIGM-Discord-Bot.  If not, see <https://www.gnu.org/licenses/>.
 
 import asyncio
 from datetime import datetime
-from typing import Callable
+from typing import Callable, List
 
 import discord
 from discord import utils
+from discord import Embed
 from discord.ext import commands
 from disputils import BotConfirmation
 
-from the_universe import syntax
 from utils.paginate import dpyPaginate
 
 
@@ -84,9 +84,9 @@ class CustomContext(commands.Context):
 
             return False
 
-    async def paginate(self, em_list: list, **kwargs):
+    async def paginate(self, em_list: List[Embed], **kwargs):
 
-        pag = dpyPaginate(PageList=em_list, **kwargs)
+        pag = dpyPaginate(page_list=em_list, **kwargs)
 
         return await pag.menustart(self)
 
