@@ -86,8 +86,7 @@ class KIGM(commands.Bot):
     async def renew_memes(self):
         if len(self.av_memes) > 5 or not self.reddit:
             return
-        _meme_subs = random.sample(self.meme_subs, len(self.meme_subs))
-        sub_obj = await self.reddit.subreddit("+".join(_meme_subs[:3]))
+        sub_obj = await self.reddit.subreddit("+".join(self.meme_subs))
         async for submission in sub_obj.top(random.choice(["day", "week"])):
             if len(self.av_memes) >= 60:
                 break
