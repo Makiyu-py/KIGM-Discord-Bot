@@ -32,7 +32,7 @@ from .context import CustomContext
 from .models import init_models
 
 
-class KIGM(commands.AutoShardedBot):
+class KIGM(commands.Bot):
     def __init__(self, *args, **kwargs):
         super(KIGM, self).__init__(*args, **kwargs)
 
