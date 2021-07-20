@@ -67,7 +67,7 @@ class KIGMHelp(commands.HelpCommand):
         ]
 
     async def cmd_help(self, command: Union[Command, Group]):
-        prefix = await self.context.bot.config.find(self.guild.id)
+        prefix = await self.context.bot.config.find(self.context.guild.id)
         prefix = prefix.get("Bot Prefix", "&")
         embed = discord.Embed(
             title=f"{str(command).upper()} Help!",
